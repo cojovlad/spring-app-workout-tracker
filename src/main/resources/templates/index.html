@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GymLog Application User Stories & Implementation Roadmap</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .story-title { font-weight: bold; }
+        .story-section { margin-bottom: 1rem; }
+        .criteria li { margin-bottom: .5rem; }
+        .implementation { background-color: #f1f1f1; padding: 0.75rem; border-radius: 0.25rem; margin-bottom: 1rem; }
+        .section-header { background-color: #e9ecef; padding: 1rem; border-radius: 0.25rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+<div class="container my-4">
+    <h1 class="mb-4 text-center">GymLog Application User Stories & Implementation Roadmap</h1>
+
+    <!-- Application Overview -->
+    <div class="section-header">
+        <h4>Overall Approach and Layered Architecture</h4>
+        <p>
+            GymLog is built using Spring Boot 3.x, Thymeleaf for the frontend, MySQL (RDS), and deployed on AWS.
+            The application adheres to a layered architecture:
+        </p>
+        <ul>
+            <li><strong>Domain Layer:</strong> Java entities (User, Role, UserTrainer, Workout, WorkoutVersion) with JPA annotations.</li>
+            <li><strong>Repository Layer:</strong> JPA repository interfaces for data access.</li>
+            <li><strong>Service Layer:</strong> Business logic for authentication, role management, workout processing, notifications, etc.</li>
+            <li><strong>Controller Layer:</strong> REST and web controllers exposing endpoints for Thymeleaf pages and real-time communications.</li>
+            <li>Additional support layers cover Security (JWT, OAuth2, CSRF, CORS) and WebSocket-based notifications.</li>
+        </ul>
+    </div>
+
+    <!-- Accordion for Modules/User Stories -->
+    <div id="userStoriesAccordion">
+
+        <!-- Story 1: Authentication Module -->
+        <div class="card story-section">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        1. User Authentication Flow (5 Story Points)
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#userStoriesAccordion">
+                <div class="card-body">
+                    <p class="story-title">Title:</p>
+                    <p>User Authentication Flow with Local & OAuth2 Login</p>
+
+                    <p class="story-title">Estimation:</p>
+                    <p>5 Story Points</p>
+
+                    <p class="story-title">Description:</p>
+                    <p>This story covers authentication using JWT for local login and OAuth2 for social login (Google/Facebook). It must securely handle user credential submissions, token generation/validation, and redirections, while enforcing security measures like CSRF, CORS, and secure sessions.</p>
+
+                    <p class="story-title">Implementation Details:</p>
+                    <div class="implementation">
+                        <ul>
+                            <li>
+                                <strong>Domain Entities:</strong>
+                                <ul>
+                                    <li><code>User</code>: Fields – <code>Long id</code>, <code>String email (unique)</code>, <code>String passwordHash</code>,
+                                        <code>String name</code>, <code>String timezone (default 'UTC')</code>, <code>Set&lt;Role&gt; roles</code>, <code>LocalDateTime createdAt, updatedAt</code></li>
+                                    <li><code>Role</code>: Fields – <code>Long id</code>, <code>String roleName</code> (e.g., ADMIN, TRAINER, USER)</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Repositories:</strong>
+                                <ul>
+                                    <li><code>UserRepository</code>: Extends <code>JpaRepository&lt;User, Long&gt;</code> (with <code>findByEmail(String email)</code>)</li>
+                                    <li><code>RoleRepository</code>: Extends <code>JpaRepository&lt;Role, Long&gt;</code></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Services:</strong>
+                                <ul>
+                                    <li><code>UserService</code>: Methods – <code>register(User)</code>, <code>findByEmail(String email)</code>, <code>updateLastLogin(Long userId)</code></li>
+                                    <li><code>AuthService</code>: Methods for login flow, JWT generation (<code>generateToken(UserDetails)</code>), token validation, and token refresh.</li>
+                                    <li><code>JwtUtil</code>: Utility class to encapsulate JWT token logic using the jjwt library.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Controllers & Security:</strong>
+                                <ul>
+                                    <li><code>AuthController</code>: Endpoints – <code>POST /auth/login</code>, <code>POST /auth/refresh</code>, <code>GET /auth/oauth2/redirect</code></li>
+                                    <li><code>SecurityConfig</code>: Configure JWT filters, OAuth2 settings, CSRF, CORS, and role-based access (for Spring Boot 3.x use the latest DSL).</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p class="story-title">Acceptance Criteria:</p>
+                    <ul class="criteria">
+                        <li>Users can log in using local credentials or social accounts.</li>
+                        <li>A valid JWT is generated on successful authentication.</li>
+                        <li>JWT filters validate tokens on every request.</li>
+                        <li>Security measures like CSRF, CORS, and HTTPS enforcement are active.</li>
+                        <li>Error feedback is provided for invalid logins.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story 2: Role Management & Trainer Assignment -->
+        <div class="card story-section">
+            <div class="card-header" id="headingTwo">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        2. Role Management and Trainer Assignment (3 Story Points)
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#userStoriesAccordion">
+                <div class="card-body">
+                    <p class="story-title">Title:</p>
+                    <p>Role Management and Single Trainer Mapping</p>
+
+                    <p class="story-title">Estimation:</p>
+                    <p>3 Story Points</p>
+
+                    <p class="story-title">Description:</p>
+                    <p>This story details enforcing a one-to-one relationship between a trainee and a trainer. It covers the administration of user roles (ADMIN, TRAINER, USER) and provides a dashboard for trainers to view and manage their assigned trainees.</p>
+
+                    <p class="story-title">Implementation Details:</p>
+                    <div class="implementation">
+                        <ul>
+                            <li>
+                                <strong>Domain Entity:</strong>
+                                <ul>
+                                    <li><code>UserTrainer</code>: Fields – <code>Long id</code>, <code>User user</code> (trainee), <code>User trainer</code> (the trainer), <code>LocalDate startDate</code>, <code>LocalDate endDate</code> (nullable), <code>boolean active</code></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Repository:</strong>
+                                <ul>
+                                    <li><code>UserTrainerRepository</code>: Extends <code>JpaRepository&lt;UserTrainer, Long&gt;</code> with <code>findByUserAndActiveTrue(User user)</code></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Service:</strong>
+                                <ul>
+                                    <li><code>TrainerService</code>: Methods – <code>assignTrainer(User, User)</code>, <code>removeTrainer(User)</code>, <code>getTraineesForTrainer(User)</code></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Controller:</strong>
+                                <ul>
+                                    <li><code>TrainerController</code>: Endpoints – <code>POST /trainer/assign</code>, <code>POST /trainer/remove</code>, <code>GET /trainer/my-trainees</code></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p class="story-title">Acceptance Criteria:</p>
+                    <ul class="criteria">
+                        <li>Admins can assign roles and trainers via an Admin Panel.</li>
+                        <li>Each user has at most one active trainer assignment.</li>
+                        <li>Trainers view a list of their assigned trainees.</li>
+                        <li>Changes to trainer assignments immediately update the user profile.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story 3: Workout System – User Workflow -->
+        <div class="card story-section">
+            <div class="card-header" id="headingThree">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        3. Personal Workout Creation & Display (5 Story Points)
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#userStoriesAccordion">
+                <div class="card-body">
+                    <p class="story-title">Title:</p>
+                    <p>Personal Workout Creation and Daily Display</p>
+
+                    <p class="story-title">Estimation:</p>
+                    <p>5 Story Points</p>
+
+                    <p class="story-title">Description:</p>
+                    <p>This story enables users to create and manage personal workouts. The UI shows a “+” icon when no workout exists for the day. Once created, workouts are visually differentiated from trainer-assigned workouts.</p>
+
+                    <p class="story-title">Implementation Details:</p>
+                    <div class="implementation">
+                        <ul>
+                            <li>
+                                <strong>Domain Entity:</strong>
+                                <ul>
+                                    <li><code>Workout</code>: Fields – <code>Long id</code>, <code>User user</code> (trainee), <code>User createdBy</code> (creator: trainer or user),
+                                        <code>Enum WorkoutType { PERSONAL, TRAINER }</code>, <code>LocalDate scheduledDate</code>, <code>String content</code>,
+                                        <code>LocalDateTime createdAt, updatedAt</code></li>
+                                    <li><code>WorkoutVersion</code>: Fields – <code>Long id</code>, <code>Workout workout</code>, <code>String diff</code>,
+                                        <code>User modifiedBy</code>, <code>LocalDateTime modifiedAt</code></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Repositories:</strong>
+                                <ul>
+                                    <li><code>WorkoutRepository</code>: Extends <code>JpaRepository&lt;Workout, Long&gt;</code> (with a custom method such as <code>findByUserAndScheduledDate(User, LocalDate)</code>)</li>
+                                    <li><code>WorkoutVersionRepository</code>: Extends <code>JpaRepository&lt;WorkoutVersion, Long&gt;</code></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Services:</strong>
+                                <ul>
+                                    <li><code>WorkoutService</code>: Methods – <code>createWorkout(Workout)</code>, <code>updateWorkout(Workout)</code>, <code>deleteWorkout(Long)</code>,
+                                        <code>getWorkoutsForUserByDate(User, LocalDate)</code></li>
+                                    <li><code>WorkoutVersionService</code>: Method to <code>saveWorkoutVersion(Workout, String, User)</code> for update logging.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Controller:</strong>
+                                <ul>
+                                    <li><code>WorkoutController</code>: Endpoints – <code>POST /workouts</code>, <code>PUT /workouts/{id}</code>, <code>DELETE /workouts/{id}</code>,
+                                        <code>GET /workouts?date=...</code></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p class="story-title">Acceptance Criteria:</p>
+                    <ul class="criteria">
+                        <li>The “+” icon displays when no personal workout exists.</li>
+                        <li>New workouts are saved and visible in the daily dashboard.</li>
+                        <li>Personal and trainer-assigned workouts are visually distinct.</li>
+                        <li>Users can edit and delete their personal workouts.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story 4: Workout System – Trainer Workflow -->
+        <div class="card story-section">
+            <div class="card-header" id="headingFour">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        4. Trainer Dashboard for Day-Based Workout Management (5 Story Points)
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#userStoriesAccordion">
+                <div class="card-body">
+                    <p class="story-title">Title:</p>
+                    <p>Trainer Dashboard and Day-Based Workout Management</p>
+
+                    <p class="story-title">Estimation:</p>
+                    <p>5 Story Points</p>
+
+                    <p class="story-title">Description:</p>
+                    <p>This story focuses on the trainer’s dashboard where trainers manage workouts for their assigned trainees in a Mon–Sun layout. Changes in workout details trigger updates that are visible on the trainee’s view.</p>
+
+                    <p class="story-title">Implementation Details:</p>
+                    <div class="implementation">
+                        <ul>
+                            <li>
+                                <strong>Domain:</strong>
+                                <ul>
+                                    <li><code>Workout</code> and <code>WorkoutVersion</code> (see Story 3)</li>
+                                    <li>Use existing <code>UserTrainer</code> mappings to determine trainee lists.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Service:</strong>
+                                <ul>
+                                    <li>Extend <code>WorkoutService</code> methods to support updates and deletions initiated from the trainer dashboard.</li>
+                                    <li>Log changes via <code>WorkoutVersionService</code> for audit purposes.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Controller:</strong>
+                                <ul>
+                                    <li><code>TrainerController</code> (or a dedicated endpoint in <code>WorkoutController</code>) to allow creation, update, and deletion for each day.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p class="story-title">Acceptance Criteria:</p>
+                    <ul class="criteria">
+                        <li>Trainers can view and manage a list of their trainees.</li>
+                        <li>A day-based grid (Mon–Sun) is available to create, update, or delete workouts.</li>
+                        <li>Updates trigger validations and record audit logs.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story 5: Notification System -->
+        <div class="card story-section">
+            <div class="card-header" id="headingFive">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        5. Real-Time Notification System (4 Story Points)
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#userStoriesAccordion">
+                <div class="card-body">
+                    <p class="story-title">Title:</p>
+                    <p>Real-Time Notifications via WebSocket</p>
+
+                    <p class="story-title">Estimation:</p>
+                    <p>4 Story Points</p>
+
+                    <p class="story-title">Description:</p>
+                    <p>This story implements a real-time notification system using WebSocket and STOMP. Events such as workout creation, updates, or trainer removal trigger notifications delivered as toast messages and appear in a notification center.</p>
+
+                    <p class="story-title">Implementation Details:</p>
+                    <div class="implementation">
+                        <ul>
+                            <li>
+                                <strong>WebSocket Configuration:</strong>
+                                <ul>
+                                    <li><code>WebSocketConfig</code>: Annotated with <code>@EnableWebSocketMessageBroker</code>, configures endpoint (e.g., <code>/ws</code>), allowed origins, and destination prefixes.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Notification DTOs:</strong>
+                                <ul>
+                                    <li>Create classes such as <code>NotificationDTO</code> or <code>WorkoutNotificationMessage</code> to encapsulate message data.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Service:</strong>
+                                <ul>
+                                    <li><code>NotificationService</code>: Methods – <code>sendNotificationToUser(Long, NotificationDTO)</code> and <code>broadcastNotification(NotificationDTO)</code>; utilizes <code>SimpMessagingTemplate</code>.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Controller:</strong>
+                                <ul>
+                                    <li><code>NotificationController</code>: Optionally provide endpoints for managing notification subscriptions (or integrate notifications within existing controllers).</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p class="story-title">Acceptance Criteria:</p>
+                    <ul class="criteria">
+                        <li>Notifications trigger upon workout events.</li>
+                        <li>Secure WebSocket endpoints are configured using STOMP.</li>
+                        <li>Toast notifications display on the UI and a notification center shows historical events.</li>
+                        <li>Multiple concurrent notifications do not impact system performance.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story 6: I18n and Mobile UI -->
+        <div class="card story-section">
+            <div class="card-header" id="headingSix">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        6. I18n and Mobile UI Responsiveness (3 Story Points)
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#userStoriesAccordion">
+                <div class="card-body">
+                    <p class="story-title">Title:</p>
+                    <p>Internationalization and Mobile-Responsive Interface</p>
+
+                    <p class="story-title">Estimation:</p>
+                    <p>3 Story Points</p>
+
+                    <p class="story-title">Description:</p>
+                    <p>This story ensures that the application supports multiple languages (EN, DE, ES) and adapts fluidly across devices using Thymeleaf templates combined with Bootstrap’s grid system.</p>
+
+                    <p class="story-title">Implementation Details:</p>
+                    <div class="implementation">
+                        <ul>
+                            <li>
+                                <strong>Frontend:</strong>
+                                <ul>
+                                    <li>Create Thymeleaf templates for pages like <code>login.html</code>, <code>dashboard.html</code>, <code>trainer-dashboard.html</code>, and partial fragments (e.g., <code>notification-fragment.html</code>).</li>
+                                    <li>Use a language selector in the header to change languages.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Backend:</strong>
+                                <ul>
+                                    <li>Add message resource bundles: <code>messages_en.properties</code>, <code>messages_de.properties</code>, <code>messages_es.properties</code> in the <code>resources</code> folder.</li>
+                                    <li>Configure a <code>LocaleResolver</code> bean (e.g., SessionLocaleResolver or CookieLocaleResolver) and register an interceptor for locale changes.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p class="story-title">Acceptance Criteria:</p>
+                    <ul class="criteria">
+                        <li>All user-facing text is externalized into message bundles.</li>
+                        <li>The layout adapts fluidly across mobile, tablet, and desktop.</li>
+                        <li>Users can switch languages via a selector, and the preference persists.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Story 7: Deployment & Security -->
+        <div class="card story-section">
+            <div class="card-header" id="headingSeven">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                        7. AWS Deployment & Enhanced Security (3 Story Points)
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#userStoriesAccordion">
+                <div class="card-body">
+                    <p class="story-title">Title:</p>
+                    <p>AWS Deployment Configuration and Security Enhancements</p>
+
+                    <p class="story-title">Estimation:</p>
+                    <p>3 Story Points</p>
+
+                    <p class="story-title">Description:</p>
+                    <p>This story involves deploying the application to AWS using EC2 and RDS, configuring CloudWatch for monitoring, enforcing HTTPS via ACM certificates, and setting up rate limiting and input sanitization.</p>
+
+                    <p class="story-title">Implementation Details:</p>
+                    <div class="implementation">
+                        <ul>
+                            <li>
+                                <strong>Environment Setup:</strong>
+                                <ul>
+                                    <li>Create <code>application.properties</code> and <code>application-prod.properties</code> for AWS settings (RDS MySQL connection, AWS S3 credentials if needed, CloudWatch logging configuration).</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Deployment:</strong>
+                                <ul>
+                                    <li>Deploy the Spring Boot application to an EC2 instance behind a load balancer with ACM certificate enforcing HTTPS.</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Security Enhancements:</strong>
+                                <ul>
+                                    <li>Use Spring Security to sanitize inputs, enforce CSRF protection, and optionally add a rate-limiting filter.</li>
+                                    <li>Configure HTTP headers (Content-Security-Policy, etc.) in SecurityConfig.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p class="story-title">Acceptance Criteria:</p>
+                    <ul class="criteria">
+                        <li>The application is deployed on AWS with EC2, RDS, and S3 (for assets) as needed.</li>
+                        <li>HTTPS is enforced via ACM certificates.</li>
+                        <li>Rate limiting and input sanitization are active to prevent abuse.</li>
+                        <li>Monitoring and logging are set up with CloudWatch.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- End Accordion -->
+
+    <!-- Overall End-to-End Flow Overview -->
+    <div class="section-header mt-4">
+        <h4>End-to-End Flow Overview</h4>
+        <p>
+            <strong>Registration & Login:</strong> New users register via <code>register.html</code> handled by <code>AuthController</code> (which uses <code>UserService</code> and <code>AuthService</code> to create <code>User</code> entities and assign roles). A valid JWT is generated upon login and validated by a security filter.
+        </p>
+        <p>
+            <strong>Role & Trainer Assignment:</strong> Trainees select a trainer through a form on their profile page. <code>TrainerController</code> calls <code>TrainerService.assignTrainer(...)</code> which creates a <code>UserTrainer</code> mapping after ensuring only one active trainer exists per user.
+        </p>
+        <p>
+            <strong>Workout Management:</strong> Users add personal workouts using a “+” button on the daily dashboard (via <code>WorkoutController.createWorkout(...)</code>). Trainer-assigned workouts are managed in a day-based layout accessed on the trainer dashboard. Changes are logged in <code>WorkoutVersion</code> entities.
+        </p>
+        <p>
+            <strong>Real-Time Notifications:</strong> Post workout creation or update, <code>NotificationService.sendNotificationToUser(...)</code> triggers a message via WebSocket (configured in <code>WebSocketConfig</code>), and the UI displays toast notifications.
+        </p>
+        <p>
+            <strong>I18n & UI Responsiveness:</strong> Language selection is handled by a locale resolver (configured with message bundles), and responsive layouts use Bootstrap’s grid system in Thymeleaf templates.
+        </p>
+        <p>
+            <strong>Deployment & Security:</strong> The application is deployed on AWS (EC2/RDS) with HTTPS enforced, proper logging to CloudWatch, and security enhancements (CSRF, CORS, rate limiting) via Spring Security.
+        </p>
+    </div>
+</div> <!-- End Container -->
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
