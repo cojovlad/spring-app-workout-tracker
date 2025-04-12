@@ -12,7 +12,7 @@
 	<artifactId>spring-app-workout-tracker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-app-workout-tracker</name>
-	<description>Workout Tracker(Gymlog) is a fitness platform enabling users and trainers to manage workouts seamlessly. Track personal/trainer-assigned routines with real-time notifications. Features role-based access (Admin/Trainer/User), OAuth2 login, multilingual support, and WebSocket updates. Built on Spring Boot 3.x, MySQL, AWS, with mobile-responsive design for cross-device accessibility.</description>
+	<description>Workout Tracker(Gymlog) is a fitness platform enabling users and trainers to manage workouts seamlessly. Track personal/trainer-assigned routines with real-time notifications. Features role-based access (Admin/Trainer/com.example.spring_app_workout_tracker.entity.User), OAuth2 login, multilingual support, and WebSocket updates. Built on Spring Boot 3.x, MySQL, AWS, with mobile-responsive design for cross-device accessibility.</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -113,34 +113,48 @@
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>s3</artifactId>
-			<version>2.25.16</version> <!-- Compatible with Java 21 -->
+			<version>2.25.16</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok-maven-plugin</artifactId>
+				<version>1.18.20.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>delombok</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.projectlombok</groupId>
+						<artifactId>lombok</artifactId>
+						<version>${lombok.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>
