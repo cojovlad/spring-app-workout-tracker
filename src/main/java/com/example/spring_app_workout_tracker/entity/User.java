@@ -21,10 +21,10 @@ public class User implements UserDetails {
     @Column(nullable = false)
     String firstName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String username;
 
     @Column(nullable = false, unique = true)
@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     String passwordHash;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -65,16 +65,6 @@ public class User implements UserDetails {
         if (updatedAt == null) {
             updatedAt = new Date();
         }
-        if (preferredLanguage == null) {
-            preferredLanguage = new Language();
-            preferredLanguage.setCode("en");
-            preferredLanguage.setName("English");
-        }
-        if (roles.isEmpty()) {
-            Role role = new Role();
-            role.setName("ROLE_USER");
-            roles.add(role);
-        }
     }
 
     @PreUpdate
@@ -98,7 +88,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
