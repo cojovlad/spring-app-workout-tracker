@@ -8,6 +8,7 @@ import com.example.spring_app_workout_tracker.repository.LanguageRepository;
 import com.example.spring_app_workout_tracker.repository.RoleRepository;
 import com.example.spring_app_workout_tracker.repository.UserRepository;
 import com.example.spring_app_workout_tracker.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -100,5 +101,14 @@ public class UserServiceImpl implements UserService {
 
     public List<Language> getAllLanguages() {
         return languageRepository.findAll();
+    }
+
+    @Override
+    public void updateUserLanguage(String username, String code) {
+        User user = getUserByUsername(username);
+        Language language = languageRepository.findByCode(code).orElseThrow(() -> new EntityNotFoundException("language.not.found"));
+
+        user.setPreferredLanguage(language);
+        userRepository.save(user);
     }
 }

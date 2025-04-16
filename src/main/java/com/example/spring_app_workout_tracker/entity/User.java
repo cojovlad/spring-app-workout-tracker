@@ -2,6 +2,7 @@ package com.example.spring_app_workout_tracker.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Data
+@ToString(exclude = {"preferredLanguage", "roles"})
 @Table(name = "users")
 public class User implements UserDetails {
 

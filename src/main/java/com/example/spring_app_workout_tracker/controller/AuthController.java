@@ -36,13 +36,13 @@ public class AuthController {
         }
 
         if (error != null) {
-            model.addAttribute("error", "Invalid username or password");
+            model.addAttribute("error", "error.invalid.credentials");
         }
         if (logout != null) {
-            model.addAttribute("message", "You have been logged out successfully");
+            model.addAttribute("message", "success.logout");
         }
         if (registered != null) {
-            model.addAttribute("message", "Registration successful! Please login");
+            model.addAttribute("message", "success.registration");
         }
         return "login";
     }
@@ -58,7 +58,7 @@ public class AuthController {
     public String registerUser(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
         try {
             userService.createUser(user);
-            redirectAttributes.addFlashAttribute("success", "Registration successful! Please login.");
+            redirectAttributes.addFlashAttribute("success", "success.registration");
             return "redirect:/api/v1/auth/login";
         } catch (CustomAppException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
