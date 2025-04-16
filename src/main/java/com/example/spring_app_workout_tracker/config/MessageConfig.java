@@ -6,13 +6,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 @Configuration
-public class I18nConfig {
+public class MessageConfig {
 
     @Bean
     public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
-        source.setBasename("classpath:messages");
-        source.setDefaultEncoding("UTF-8");
-        return source;
+        ReloadableResourceBundleMessageSource messageSource =
+                new ReloadableResourceBundleMessageSource();
+
+        messageSource.setBasenames(
+                "classpath:messages",
+                "classpath:ValidationMessages"
+        );
+
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 }

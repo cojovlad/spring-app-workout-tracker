@@ -13,8 +13,12 @@ import java.util.Locale;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final MessageSource messageSource;
+
     @Autowired
-    private MessageSource messageSource;
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(CustomAppException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomAppException ex, Locale locale) {
@@ -24,8 +28,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
-        ErrorResponse error = new ErrorResponse("error.unexpected", "GENERIC_ERROR");
+    public ResponseEntity<ErrorResponse> handleGeneral(Exception ex, Locale locale) {
+        String localizedMessage;
+        if (ex.getMessage() != null) {
+            localizedMessage = messageSource.getMessage("error.unexpected", new Object[]{ex.getMessage()}, locale);
+        } else {
+            localizedMessage = messageSource.getMessage("error.unexpected", null, locale);
+        }
+
+        ErrorResponse error = new ErrorResponse(localizedMessage, "GENERIC_ERROR");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

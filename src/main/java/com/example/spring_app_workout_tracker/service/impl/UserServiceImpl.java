@@ -11,6 +11,7 @@ import com.example.spring_app_workout_tracker.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,35 +25,37 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final LanguageRepository languageRepository;
     private final RoleRepository roleRepository;
+    private final MessageSource messageSource;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, LanguageRepository languageRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, LanguageRepository languageRepository, RoleRepository roleRepository, MessageSource messageSource) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.languageRepository = languageRepository;
         this.roleRepository = roleRepository;
+        this.messageSource = messageSource;
     }
 
     @Override
     @Transactional
     public User createUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new CustomAppException("error.username.taken", null, HttpStatus.BAD_REQUEST, "USERNAME_TAKEN");
+            throw new CustomAppException("error.username.taken", null, HttpStatus.BAD_REQUEST, "USERNAME_TAKEN", messageSource);
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new CustomAppException("error.email.taken", null, HttpStatus.BAD_REQUEST, "EMAIL_TAKEN");
+            throw new CustomAppException("error.email.taken", null, HttpStatus.BAD_REQUEST, "EMAIL_TAKEN", messageSource);
         }
 
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
             Role defaultRole = roleRepository.findById(1L)
-                    .orElseThrow(() -> new CustomAppException("error.role.not.found", new Object[]{1L}, HttpStatus.INTERNAL_SERVER_ERROR, "DEFAULT_ROLE_NOT_FOUND"));
+                    .orElseThrow(() -> new CustomAppException("error.role.not.found", new Object[]{1L}, HttpStatus.INTERNAL_SERVER_ERROR, "DEFAULT_ROLE_NOT_FOUND", messageSource));
             user.getRoles().add(defaultRole);
         }
 
         if (user.getPreferredLanguage() == null) {
             Language defaultLanguage = languageRepository.findByCode("en")
-                    .orElseThrow(() -> new CustomAppException("error.language.not.found", new Object[]{"en"}, HttpStatus.INTERNAL_SERVER_ERROR, "DEFAULT_LANGUAGE_NOT_FOUND"));
+                    .orElseThrow(() -> new CustomAppException("error.language.not.found", new Object[]{"en"}, HttpStatus.INTERNAL_SERVER_ERROR, "DEFAULT_LANGUAGE_NOT_FOUND", messageSource));
             user.setPreferredLanguage(defaultLanguage);
         }
 
@@ -65,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
-            throw new CustomAppException("error.users.not.found", null, HttpStatus.NOT_FOUND, "NO_USERS_FOUND");
+            throw new CustomAppException("error.users.not.found", null, HttpStatus.NOT_FOUND, "NO_USERS_FOUND", messageSource);
         }
         return users;
     }
@@ -73,28 +76,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
-                new CustomAppException("error.user.not.found", new Object[]{id}, HttpStatus.NOT_FOUND, "USER_NOT_FOUND")
+                new CustomAppException("error.user.not.found", new Object[]{id}, HttpStatus.NOT_FOUND, "USER_NOT_FOUND", messageSource)
         );
     }
 
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() ->
-                new CustomAppException("error.user.not.found.username", new Object[]{username}, HttpStatus.NOT_FOUND, "USER_NOT_FOUND")
+                new CustomAppException("error.user.not.found.username", new Object[]{username}, HttpStatus.NOT_FOUND, "USER_NOT_FOUND", messageSource)
         );
     }
 
     @Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
-                new CustomAppException("error.user.not.found.email", new Object[]{email}, HttpStatus.NOT_FOUND, "USER_NOT_FOUND")
+                new CustomAppException("error.user.not.found.email", new Object[]{email}, HttpStatus.NOT_FOUND, "USER_NOT_FOUND", messageSource)
         );
     }
 
     @Override
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new CustomAppException("error.user.not.found", new Object[]{id}, HttpStatus.NOT_FOUND, "USER_NOT_FOUND");
+            throw new CustomAppException("error.user.not.found", new Object[]{id}, HttpStatus.NOT_FOUND, "USER_NOT_FOUND", messageSource);
         }
         userRepository.deleteById(id);
     }
