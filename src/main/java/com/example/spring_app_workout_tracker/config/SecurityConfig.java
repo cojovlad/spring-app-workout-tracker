@@ -1,5 +1,6 @@
 package com.example.spring_app_workout_tracker.config;
 
+import com.example.spring_app_workout_tracker.service.OAuth2LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,14 +16,16 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final PersistentTokenRepository persistentTokenRepository;
     private final String rememberMeKey;
+    private final OAuth2LoginSuccessHandler oauth2LoginSuccessHandler;
 
     @Autowired
     public SecurityConfig(UserDetailsService userDetailsService,
                           PersistentTokenRepository persistentTokenRepository,
-                          String rememberMeKey) {
+                          String rememberMeKey, OAuth2LoginSuccessHandler oauth2LoginSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.persistentTokenRepository = persistentTokenRepository;
         this.rememberMeKey = rememberMeKey;
+        this.oauth2LoginSuccessHandler = oauth2LoginSuccessHandler;
     }
 
     @Bean
@@ -35,7 +38,9 @@ public class SecurityConfig {
                                 "/api/v1/auth/register",
                                 "/css/**",
                                 "/js/**",
-                                "/favicon.ico"
+                                "/favicon.ico",
+                                "/oauth2/**",
+                                "/login/oauth2/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -46,11 +51,16 @@ public class SecurityConfig {
                         .failureUrl("/api/v1/auth/login?error=true")
                         .permitAll()
                 )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/api/v1/auth/login")
+                        .defaultSuccessUrl("/api/v1/dashboard", true)
+                        .successHandler(oauth2LoginSuccessHandler)
+                )
                 .rememberMe(rememberMe -> rememberMe
                         .tokenRepository(persistentTokenRepository)
                         .userDetailsService(userDetailsService)
                         .key(rememberMeKey)
-                        .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 days
+                        .tokenValiditySeconds(7 * 24 * 60 * 60)
                         .rememberMeParameter("remember-me")
                         .rememberMeCookieName("remember-me-cookie")
                         .useSecureCookie(true)
