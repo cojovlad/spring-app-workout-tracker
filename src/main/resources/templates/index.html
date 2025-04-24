@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GymLog Application User Stories & Implementation Roadmap</title>
+    <title>GymLog Application com.example.spring_app_workout_tracker.entity.User Stories & Implementation Roadmap</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -26,7 +26,7 @@
             The application adheres to a layered architecture:
         </p>
         <ul>
-            <li><strong>Domain Layer:</strong> Java entities (User, Role, UserTrainer, Workout, WorkoutVersion) with JPA annotations.</li>
+            <li><strong>Domain Layer:</strong> Java entities (com.example.spring_app_workout_tracker.entity.User, Role, UserTrainer, Workout, WorkoutVersion) with JPA annotations.</li>
             <li><strong>Repository Layer:</strong> JPA repository interfaces for data access.</li>
             <li><strong>Service Layer:</strong> Business logic for authentication, role management, workout processing, notifications, etc.</li>
             <li><strong>Controller Layer:</strong> REST and web controllers exposing endpoints for Thymeleaf pages and real-time communications.</li>
@@ -34,7 +34,7 @@
         </ul>
     </div>
 
-    <!-- Accordion for Modules/User Stories -->
+    <!-- Accordion for Modules/com.example.spring_app_workout_tracker.entity.User Stories -->
     <div id="userStoriesAccordion">
 
         <!-- Story 1: Authentication Module -->
@@ -43,14 +43,14 @@
                 <h2 class="mb-0">
                     <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
                             data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        1. User Authentication Flow (5 Story Points)
+                        1. com.example.spring_app_workout_tracker.entity.User Authentication Flow (5 Story Points)
                     </button>
                 </h2>
             </div>
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#userStoriesAccordion">
                 <div class="card-body">
                     <p class="story-title">Title:</p>
-                    <p>User Authentication Flow with Local & OAuth2 Login</p>
+                    <p>com.example.spring_app_workout_tracker.entity.User Authentication Flow with Local & OAuth2 Login</p>
 
                     <p class="story-title">Estimation:</p>
                     <p>5 Story Points</p>
@@ -64,7 +64,7 @@
                             <li>
                                 <strong>Domain Entities:</strong>
                                 <ul>
-                                    <li><code>User</code>: Fields – <code>Long id</code>, <code>String email (unique)</code>, <code>String passwordHash</code>,
+                                    <li><code>com.example.spring_app_workout_tracker.entity.User</code>: Fields – <code>Long id</code>, <code>String email (unique)</code>, <code>String passwordHash</code>,
                                         <code>String name</code>, <code>String timezone (default 'UTC')</code>, <code>Set&lt;Role&gt; roles</code>, <code>LocalDateTime createdAt, updatedAt</code></li>
                                     <li><code>Role</code>: Fields – <code>Long id</code>, <code>String roleName</code> (e.g., ADMIN, TRAINER, USER)</li>
                                 </ul>
@@ -72,14 +72,14 @@
                             <li>
                                 <strong>Repositories:</strong>
                                 <ul>
-                                    <li><code>UserRepository</code>: Extends <code>JpaRepository&lt;User, Long&gt;</code> (with <code>findByEmail(String email)</code>)</li>
+                                    <li><code>UserRepository</code>: Extends <code>JpaRepository&lt;com.example.spring_app_workout_tracker.entity.User, Long&gt;</code> (with <code>findByEmail(String email)</code>)</li>
                                     <li><code>RoleRepository</code>: Extends <code>JpaRepository&lt;Role, Long&gt;</code></li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Services:</strong>
                                 <ul>
-                                    <li><code>UserService</code>: Methods – <code>register(User)</code>, <code>findByEmail(String email)</code>, <code>updateLastLogin(Long userId)</code></li>
+                                    <li><code>UserService</code>: Methods – <code>register(com.example.spring_app_workout_tracker.entity.User)</code>, <code>findByEmail(String email)</code>, <code>updateLastLogin(Long userId)</code></li>
                                     <li><code>AuthService</code>: Methods for login flow, JWT generation (<code>generateToken(UserDetails)</code>), token validation, and token refresh.</li>
                                     <li><code>JwtUtil</code>: Utility class to encapsulate JWT token logic using the jjwt library.</li>
                                 </ul>
@@ -133,19 +133,19 @@
                             <li>
                                 <strong>Domain Entity:</strong>
                                 <ul>
-                                    <li><code>UserTrainer</code>: Fields – <code>Long id</code>, <code>User user</code> (trainee), <code>User trainer</code> (the trainer), <code>LocalDate startDate</code>, <code>LocalDate endDate</code> (nullable), <code>boolean active</code></li>
+                                    <li><code>UserTrainer</code>: Fields – <code>Long id</code>, <code>com.example.spring_app_workout_tracker.entity.User user</code> (trainee), <code>com.example.spring_app_workout_tracker.entity.User trainer</code> (the trainer), <code>LocalDate startDate</code>, <code>LocalDate endDate</code> (nullable), <code>boolean active</code></li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Repository:</strong>
                                 <ul>
-                                    <li><code>UserTrainerRepository</code>: Extends <code>JpaRepository&lt;UserTrainer, Long&gt;</code> with <code>findByUserAndActiveTrue(User user)</code></li>
+                                    <li><code>UserTrainerRepository</code>: Extends <code>JpaRepository&lt;UserTrainer, Long&gt;</code> with <code>findByUserAndActiveTrue(com.example.spring_app_workout_tracker.entity.User user)</code></li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Service:</strong>
                                 <ul>
-                                    <li><code>TrainerService</code>: Methods – <code>assignTrainer(User, User)</code>, <code>removeTrainer(User)</code>, <code>getTraineesForTrainer(User)</code></li>
+                                    <li><code>TrainerService</code>: Methods – <code>assignTrainer(com.example.spring_app_workout_tracker.entity.User, com.example.spring_app_workout_tracker.entity.User)</code>, <code>removeTrainer(com.example.spring_app_workout_tracker.entity.User)</code>, <code>getTraineesForTrainer(com.example.spring_app_workout_tracker.entity.User)</code></li>
                                 </ul>
                             </li>
                             <li>
@@ -168,7 +168,7 @@
             </div>
         </div>
 
-        <!-- Story 3: Workout System – User Workflow -->
+        <!-- Story 3: Workout System – com.example.spring_app_workout_tracker.entity.User Workflow -->
         <div class="card story-section">
             <div class="card-header" id="headingThree">
                 <h2 class="mb-0">
@@ -195,17 +195,17 @@
                             <li>
                                 <strong>Domain Entity:</strong>
                                 <ul>
-                                    <li><code>Workout</code>: Fields – <code>Long id</code>, <code>User user</code> (trainee), <code>User createdBy</code> (creator: trainer or user),
+                                    <li><code>Workout</code>: Fields – <code>Long id</code>, <code>com.example.spring_app_workout_tracker.entity.User user</code> (trainee), <code>com.example.spring_app_workout_tracker.entity.User createdBy</code> (creator: trainer or user),
                                         <code>Enum WorkoutType { PERSONAL, TRAINER }</code>, <code>LocalDate scheduledDate</code>, <code>String content</code>,
                                         <code>LocalDateTime createdAt, updatedAt</code></li>
                                     <li><code>WorkoutVersion</code>: Fields – <code>Long id</code>, <code>Workout workout</code>, <code>String diff</code>,
-                                        <code>User modifiedBy</code>, <code>LocalDateTime modifiedAt</code></li>
+                                        <code>com.example.spring_app_workout_tracker.entity.User modifiedBy</code>, <code>LocalDateTime modifiedAt</code></li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Repositories:</strong>
                                 <ul>
-                                    <li><code>WorkoutRepository</code>: Extends <code>JpaRepository&lt;Workout, Long&gt;</code> (with a custom method such as <code>findByUserAndScheduledDate(User, LocalDate)</code>)</li>
+                                    <li><code>WorkoutRepository</code>: Extends <code>JpaRepository&lt;Workout, Long&gt;</code> (with a custom method such as <code>findByUserAndScheduledDate(com.example.spring_app_workout_tracker.entity.User, LocalDate)</code>)</li>
                                     <li><code>WorkoutVersionRepository</code>: Extends <code>JpaRepository&lt;WorkoutVersion, Long&gt;</code></li>
                                 </ul>
                             </li>
@@ -213,8 +213,8 @@
                                 <strong>Services:</strong>
                                 <ul>
                                     <li><code>WorkoutService</code>: Methods – <code>createWorkout(Workout)</code>, <code>updateWorkout(Workout)</code>, <code>deleteWorkout(Long)</code>,
-                                        <code>getWorkoutsForUserByDate(User, LocalDate)</code></li>
-                                    <li><code>WorkoutVersionService</code>: Method to <code>saveWorkoutVersion(Workout, String, User)</code> for update logging.</li>
+                                        <code>getWorkoutsForUserByDate(com.example.spring_app_workout_tracker.entity.User, LocalDate)</code></li>
+                                    <li><code>WorkoutVersionService</code>: Method to <code>saveWorkoutVersion(Workout, String, com.example.spring_app_workout_tracker.entity.User)</code> for update logging.</li>
                                 </ul>
                             </li>
                             <li>
@@ -471,7 +471,7 @@
     <div class="section-header mt-4">
         <h4>End-to-End Flow Overview</h4>
         <p>
-            <strong>Registration & Login:</strong> New users register via <code>register.html</code> handled by <code>AuthController</code> (which uses <code>UserService</code> and <code>AuthService</code> to create <code>User</code> entities and assign roles). A valid JWT is generated upon login and validated by a security filter.
+            <strong>Registration & Login:</strong> New users register via <code>register.html</code> handled by <code>AuthController</code> (which uses <code>UserService</code> and <code>AuthService</code> to create <code>com.example.spring_app_workout_tracker.entity.User</code> entities and assign roles). A valid JWT is generated upon login and validated by a security filter.
         </p>
         <p>
             <strong>Role & Trainer Assignment:</strong> Trainees select a trainer through a form on their profile page. <code>TrainerController</code> calls <code>TrainerService.assignTrainer(...)</code> which creates a <code>UserTrainer</code> mapping after ensuring only one active trainer exists per user.
