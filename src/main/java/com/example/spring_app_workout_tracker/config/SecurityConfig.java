@@ -1,10 +1,8 @@
 package com.example.spring_app_workout_tracker.config;
 
-import com.example.spring_app_workout_tracker.service.OAuth2LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
@@ -40,7 +38,8 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/favicon.ico",
                                 "/oauth2/**",
-                                "/login/oauth2/**"
+                                "/login/oauth2/**,",
+                                "/api/v1/profile/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
