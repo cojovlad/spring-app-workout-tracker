@@ -27,6 +27,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
+            <!-- Success Message after logout -->
+            <div th:if="${logoutMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${logoutMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
             <form th:action="@{/api/v1/auth/login}" method="post">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>

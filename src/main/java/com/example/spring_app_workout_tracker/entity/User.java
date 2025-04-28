@@ -43,7 +43,7 @@ public class User implements UserDetails {
     )
     private List<Role> roles = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "language_id")
     private Language preferredLanguage;
 
