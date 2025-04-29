@@ -6,13 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-    @GetMapping("")
-    public String redirectToLoginNoSlash() {
-        return "redirect:/api/v1/auth/login";
-    }
-
-    @GetMapping("/")
-    public String redirectToLoginSlash() {
+    @GetMapping({"", "/"})
+    public String redirectToLogin() {
         return "redirect:/api/v1/auth/login";
     }
 }

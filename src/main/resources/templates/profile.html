@@ -3,82 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title th:text="#{profile.title}">User Profile</title>
-    <!-- Bootstrap CSS -->
+
+    <!-- Bootstrap CSS & Font Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom Profile CSS -->
-    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <!-- Shared + Profile CSS -->
+    <link rel="stylesheet" href="/css/shared.css">
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
 <body>
-<div class="container-fluid">
-    <!-- Header -->
-    <header class="row bg-dark text-white p-3">
-        <div class="col-6">
-            <h1 th:text="#{header.title}">Workout Tracker</h1>
-        </div>
-        <div class="col-6 text-end">
-            <form action="/api/v1/language/set" method="post" class="d-inline">
-<!--                <button type="submit" name="code" value="en" class="btn btn-primary header-btn me-2" th:text="#{language.english}">English</button>-->
-<!--                <button type="submit" name="code" value="de" class="btn btn-primary header-btn me-2" th:text="#{language.german}">Deutsch</button>-->
-<!--                <button type="submit" name="code" value="es" class="btn btn-primary header-btn me-2" th:text="#{language.spanish}">Espanol</button>-->
-            </form>
+
+<!-- Shared Header (no language switch) -->
+<header class="common-header">
+    <div class="container-fluid d-flex justify-content-between align-items-center p-3">
+        <h1 class="logo" th:text="#{header.title}">Workout Tracker</h1>
+        <div>
             <a href="/api/v1/dashboard" class="btn btn-primary header-btn me-2" th:text="#{header.dashboard}">Dashboard</a>
-            <a href="/api/v1/auth/logout" class="btn btn-primary header-btn" th:text="#{header.logout}">Logout</a>
+            <a href="/api/v1/auth/logout"   class="btn btn-primary header-btn"     th:text="#{header.logout}">Logout</a>
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Main Content -->
-    <div class="container profile-container mt-4">
-        <!-- Success Message -->
+<!-- Profile Main Content -->
+<div class="main-content">
+    <div class="profile-container">
+
+        <!-- Alerts -->
+        <div th:if="${error}"   class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${error}">Error message</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" th:text="#{alert.close}">Close</button>
+        </div>
         <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
-            <span th:text="${success}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" th:text="#{alert.close}">Close</button>
-        </div>
-        <!-- Error Message -->
-        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span th:text="${error}"></span>
+            <span th:text="${success}">Success message</span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" th:text="#{alert.close}">Close</button>
         </div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="profile-header">
-                    <div class="profile-image-container">
-                        <img th:src="${user.profileImageUrl != null} ? ${user.profileImageUrl} : 'https://via.placeholder.com/150'"
-                             alt="Profile Image" class="profile-image" th:attr="alt=#{profile.image.alt}">
-                    </div>
-                    <h2 class="profile-name" th:text="${user.firstName + ' ' + user.lastName}">User Name</h2>
-                    <p class="profile-username" th:text="'@' + ${user.username}">@username</p>
-                </div>
-            </div>
+        <!-- Profile Header -->
+        <div class="profile-header">
+<!--            <img th:src="${user.profileImageUrl != null} ? ${user.profileImageUrl} : 'https://via.placeholder.com/150'"-->
+<!--                 alt="Profilbild" class="profile-image" th:attr="alt=#{profile.image.alt}">-->
+            <h2 class="profile-name" th:text="${user.firstName + ' ' + user.lastName}">User Name</h2>
+            <p class="profile-username" th:text="'@' + ${user.username}">@username</p>
         </div>
 
+        <!-- Personal & Account Info -->
         <div class="row">
             <div class="col-lg-6">
                 <div class="profile-details">
                     <h4><i class="fas fa-user-circle me-2"></i><span th:text="#{profile.personal.info}">Personal Information</span></h4>
-
                     <div class="detail-item">
                         <h6 th:text="#{profile.firstname}">First Name</h6>
                         <p th:text="${user.firstName}">First Name</p>
                     </div>
-
                     <div class="detail-item">
                         <h6 th:text="#{profile.lastname}">Last Name</h6>
                         <p th:text="${user.lastName}">Last Name</p>
                     </div>
-
                     <div class="detail-item">
                         <h6 th:text="#{profile.email}">Email</h6>
                         <p th:text="${user.email}">user@example.com</p>
                         <span th:if="${user.emailVerified}" class="badge bg-success">
-                            <i class="fas fa-check-circle"></i> <span th:text="#{profile.verified}">Verified</span>
-                        </span>
+                <i class="fas fa-check-circle"></i> <span th:text="#{profile.verified}">Verified</span>
+              </span>
                         <span th:unless="${user.emailVerified}" class="badge bg-warning text-dark">
-                            <i class="fas fa-exclamation-circle"></i> <span th:text="#{profile.not.verified}">Not Verified</span>
-                        </span>
+                <i class="fas fa-exclamation-circle"></i> <span th:text="#{profile.not.verified}">Not Verified</span>
+              </span>
                     </div>
                 </div>
             </div>
@@ -86,22 +78,19 @@
             <div class="col-lg-6">
                 <div class="profile-details">
                     <h4><i class="fas fa-info-circle me-2"></i><span th:text="#{profile.account.info}">Account Information</span></h4>
-
                     <div class="detail-item">
                         <h6 th:text="#{profile.userid}">User ID</h6>
                         <p th:text="${user.id}">12345</p>
                     </div>
-
                     <div class="detail-item">
                         <h6 th:text="#{profile.account.status}">Account Status</h6>
                         <span th:if="${user.isActive}" class="badge bg-success">
-                            <i class="fas fa-check"></i> <span th:text="#{profile.active}">Active</span>
-                        </span>
+                <i class="fas fa-check"></i> <span th:text="#{profile.active}">Active</span>
+              </span>
                         <span th:unless="${user.isActive}" class="badge bg-danger">
-                            <i class="fas fa-times"></i> <span th:text="#{profile.inactive}">Inactive</span>
-                        </span>
+                <i class="fas fa-times"></i> <span th:text="#{profile.inactive}">Inactive</span>
+              </span>
                     </div>
-
                     <div class="detail-item">
                         <h6 th:text="#{profile.roles}">Roles</h6>
                         <div th:each="role : ${user.roles}">
@@ -113,48 +102,43 @@
             </div>
         </div>
 
-        <!-- Password Change Section -->
+        <!-- Change Password Section -->
         <div class="row mt-4">
             <div class="col-lg-12">
                 <div class="profile-details">
                     <h4><i class="fas fa-key me-2"></i><span th:text="#{profile.change.password}">Change Password</span></h4>
-
-                    <form th:action="@{/api/v1/profile/change-password}" method="post"
-                          th:object="${passwordChangeForm}">
+                    <form th:action="@{/api/v1/profile/change-password}" method="post" th:object="${passwordChangeForm}">
                         <div class="mb-3">
                             <label for="currentPassword" class="form-label" th:text="#{profile.current.password}">Current Password</label>
-                            <input type="password" class="form-control" id="currentPassword"
-                                   th:field="*{currentPassword}" required>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('currentPassword')}"
-                                 th:errors="*{currentPassword}"></div>
+                            <input type="password" class="form-control" id="currentPassword" th:field="*{currentPassword}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('currentPassword')}" th:errors="*{currentPassword}"></div>
                         </div>
-
                         <div class="mb-3">
                             <label for="newPassword" class="form-label" th:text="#{profile.new.password}">New Password</label>
-                            <input type="password" class="form-control" id="newPassword"
-                                   th:field="*{newPassword}" required>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('newPassword')}"
-                                 th:errors="*{newPassword}"></div>
+                            <input type="password" class="form-control" id="newPassword" th:field="*{newPassword}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}"></div>
                         </div>
-
                         <div class="mb-3">
                             <label for="confirmPassword" class="form-label" th:text="#{profile.confirm.password}">Confirm New Password</label>
-                            <input type="password" class="form-control" id="confirmPassword"
-                                   th:field="*{confirmPassword}" required>
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}"
-                                 th:errors="*{confirmPassword}"></div>
+                            <input type="password" class="form-control" id="confirmPassword" th:field="*{confirmPassword}" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
                         </div>
-
-                        <button type="submit" class="btn btn-primary" th:text="#{profile.change.password.button}">Change Password</button>
-                        <a href="/api/v1/dashboard" class="btn btn-secondary ms-2" th:text="#{profile.back.dashboard}">Back to Dashboard</a>
+                        <button type="submit" class="btn btn-primary header-btn" th:text="#{profile.change.password.button}">Change Password</button>
+                        <a href="/api/v1/dashboard" class="btn btn-secondary header-btn ms-2" th:text="#{profile.back.dashboard}">Back to Dashboard</a>
                     </form>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
-<!-- Bootstrap JS Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Shared Footer -->
+<footer class="common-footer">
+    <div>&copy; 2025 GymLog</div>
+</footer>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 </body>
 </html>
