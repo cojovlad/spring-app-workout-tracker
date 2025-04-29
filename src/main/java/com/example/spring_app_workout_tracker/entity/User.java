@@ -12,7 +12,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Data
-@ToString(exclude = {"preferredLanguage", "roles"})
+@ToString(exclude = {"preferredLanguage", "roles",
+        "exercises", "workouts", "userWorkouts", "recurringSchedules"})
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -58,6 +59,35 @@ public class User implements UserDetails {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "createdBy",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Exercise> exercises = new ArrayList<>();
+
+    @OneToMany(mappedBy = "createdBy",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Workout> workouts = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<UserWorkout> userWorkouts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<RecurringSchedule> recurringSchedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "parentTemplate",
+            fetch = FetchType.LAZY)
+    private List<Workout> childWorkouts = new ArrayList<>();
 
     @PrePersist
     void prePersist() {
