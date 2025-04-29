@@ -22,5 +22,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.updatedAt = CURRENT_TIMESTAMP WHERE u.id = :id")
     void updateUpdatedAt(Long id);
 
-
 }

@@ -19,4 +19,6 @@ public interface UserService {
     void deleteUser(Long id);
 
     void updateUserLanguage(String username, String language);
+
+    void changePassword(String username, String currentPassword, String newPassword);
 }

@@ -32,7 +32,7 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     String email;
 
-    @Column(nullable = false)
+    @Column(name="password_hash", nullable = false)
     String passwordHash;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -43,7 +43,7 @@ public class User implements UserDetails {
     )
     private List<Role> roles = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "language_id")
     private Language preferredLanguage;
 

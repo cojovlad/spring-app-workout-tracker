@@ -1,0 +1,49 @@
+/* Base typography and common components */
+
+body,
+h1, h2, h3, h4, h5, h6,
+p, span, label, .navbar-brand, .nav-link {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Uniform button sizing */
+.header-btn {
+    min-width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .375rem .75rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Common header */
+.common-header {
+    background-color: #343a40;
+    color: #fff;
+}
+.common-header .logo {
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+/* Common footer */
+.common-footer {
+    background-color: #343a40;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: .75rem 0;
+    text-align: center;
+}
+
+/* Push main content above fixed footer */
+.main-content {
+    padding-bottom: 80px; /* footer height + a bit */
+}

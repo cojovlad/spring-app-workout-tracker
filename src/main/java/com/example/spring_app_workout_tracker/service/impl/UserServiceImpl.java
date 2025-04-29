@@ -114,4 +114,21 @@ public class UserServiceImpl implements UserService {
         user.setPreferredLanguage(language);
         userRepository.save(user);
     }
+
+    @Override
+    @Transactional
+    public void changePassword(String username, String currentPassword, String newPassword) {
+        User user = getUserByUsername(username);
+
+        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+            throw new CustomAppException("error.password.incorrect", null, HttpStatus.BAD_REQUEST, "INCORRECT_PASSWORD", messageSource);
+        }
+
+        if (currentPassword.equals(newPassword)) {
+            throw new CustomAppException("error.password.same", null, HttpStatus.BAD_REQUEST, "SAME_PASSWORD", messageSource);
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
 }

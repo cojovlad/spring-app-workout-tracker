@@ -4,11 +4,14 @@ import com.example.spring_app_workout_tracker.entity.User;
 import com.example.spring_app_workout_tracker.exception.CustomAppException;
 import com.example.spring_app_workout_tracker.service.LanguageService;
 import com.example.spring_app_workout_tracker.service.UserService;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Locale;
 
 @Controller
 @RequestMapping("api/v1/auth")
@@ -16,10 +19,12 @@ public class AuthController {
 
     private final UserService userService;
     private final LanguageService languageService;
+    private final MessageSource messageSource;
 
-    public AuthController(UserService userService, LanguageService languageService) {
+    public AuthController(UserService userService, LanguageService languageService, MessageSource messageSource) {
         this.userService = userService;
         this.languageService = languageService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping("/login")
@@ -29,20 +34,24 @@ public class AuthController {
             @RequestParam(value = "logout", required = false) String logout,
             @RequestParam(value = "registered", required = false) String registered,
             Authentication authentication,
-            Model model) {
+            Model model,
+            Locale locale) {
 
         if (authentication != null && authentication.isAuthenticated()) {
             return "redirect:/api/v1/dashboard";
         }
 
         if (error != null) {
-            model.addAttribute("error", "error.invalid.credentials");
+            String errorMessage = messageSource.getMessage("error.invalid.credentials", null, locale);
+            model.addAttribute("error", errorMessage);
         }
         if (logout != null) {
-            model.addAttribute("message", "success.logout");
+            String logoutMessage = messageSource.getMessage("success.logout", null, locale);
+            model.addAttribute("logoutMessage", logoutMessage);
         }
         if (registered != null) {
-            model.addAttribute("message", "success.registration");
+            String registeredMessage = messageSource.getMessage("success.registration", null, locale);
+            model.addAttribute("message", registeredMessage);
         }
         return "login";
     }
@@ -55,13 +64,19 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+    public String registerUser(@ModelAttribute User user, RedirectAttributes redirectAttributes, Locale locale) {
         try {
             userService.createUser(user);
-            redirectAttributes.addFlashAttribute("success", "success.registration");
+            String successMessage = messageSource.getMessage("success.registration", null, locale);
+            redirectAttributes.addFlashAttribute("success", successMessage);
             return "redirect:/api/v1/auth/login";
         } catch (CustomAppException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            String errorMessage = e.getMessage();
+            try {
+                errorMessage = messageSource.getMessage(e.getMessage(), null, locale);
+            } catch (Exception ignored) {
+            }
+            redirectAttributes.addFlashAttribute("error", errorMessage);
             return "redirect:/api/v1/auth/register";
         }
     }
