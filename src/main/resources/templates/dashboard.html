@@ -33,46 +33,17 @@
                 <div id="workoutForm" class="d-none">
                     <form th:action="@{/api/v1/dashboard/workouts}" method="post" th:object="${workoutRequest}">
                         <div class="mb-3">
-                            <input type="text" class="form-control" th:field="*{name}" th:placeholder="#{workout.name.placeholder}">
+                            <input type="text" class="form-control" th:field="*{name}"
+                                   th:placeholder="#{workout.name.placeholder}" required>
+                            <div th:if="${#fields.hasErrors('name')}" class="text-danger">
+                                <span th:errors="*{name}"></span>
+                            </div>
                         </div>
 
-                        <div id="muscleGroups">
-                            <!-- Initial visible group -->
-                            <div class="muscle-group mb-3 border p-2">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <h6 th:text="#{workout.muscle.group}">Muscle Group</h6>
-                                    <button type="button" class="btn btn-danger btn-sm remove-group">-</button>
-                                </div>
-                                <select class="form-select mb-2" name="muscleGroups[0].muscleName">
-                                    <option value="" selected th:text="#{workout.select.muscle}">Select Muscle</option>
-                                    <option th:each="muscle : ${muscleParts}"
-                                            th:value="${muscle.name}"
-                                            th:text="${muscle.name}"></option>
-                                </select>
-                                <div class="exercises">
-                                    <div class="exercise mb-2">
-                                        <input type="text" class="form-control mb-1"
-                                               name="muscleGroups[0].exercises[0].exerciseName"
-                                               th:placeholder="#{workout.exercise.name.placeholder}">
-                                        <div class="sets">
-                                            <div class="set d-flex gap-1 mb-1">
-                                                <input type="number" class="form-control"
-                                                       name="muscleGroups[0].exercises[0].sets[0].repetitions"
-                                                       th:placeholder="#{set.reps.placeholder}">
-                                                <input type="number" step="0.25" class="form-control"
-                                                       name="muscleGroups[0].exercises[0].sets[0].weightKg"
-                                                       th:placeholder="#{set.weight.placeholder}">
-                                                <button type="button" class="btn btn-warning btn-sm remove-set">-</button>
-                                            </div>
-                                        </div>
-                                        <button type="button" class="btn btn-secondary btn-sm add-set">Add Set</button>
-                                        <button type="button" class="btn btn-danger btn-sm remove-exercise">Remove Exercise</button>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-primary btn-sm add-exercise">Add Exercise</button>
-                            </div>
+                        <!-- Muscle Groups Container -->
+                        <div id="muscleGroups"></div>
 
-                        <div class="d-grid gap-2">
+                        <div class="d-grid gap-2 mt-3">
                             <button type="button" class="btn btn-primary add-group" th:text="#{workout.add.group}">Add Muscle Group</button>
                             <button type="submit" class="btn btn-success" th:text="#{workout.save}">Save Workout</button>
                             <button type="button" class="btn btn-secondary cancel-form" th:text="#{workout.cancel}">Cancel</button>
@@ -102,11 +73,167 @@
     </div>
 </div>
 
+<!-- Hidden Templates -->
+<div class="templates d-none">
+    <!-- Muscle Group Template -->
+    <div class="muscle-group-template">
+        <div class="muscle-group mb-3 border p-2">
+            <div class="d-flex justify-content-between mb-2">
+                <h6 th:text="#{workout.muscle.group}">Muscle Group</h6>
+                <button type="button" class="btn btn-danger btn-sm remove-group">-</button>
+            </div>
+            <select class="form-select mb-2" name="muscleGroups[].muscleName" required>
+                <option value="" selected th:text="#{workout.select.muscle}">Select Muscle</option>
+                <option th:each="muscle : ${muscleParts}"
+                        th:value="${muscle.name}"
+                        th:text="${muscle.name}"></option>
+            </select>
+            <div class="exercises"></div>
+            <button type="button" class="btn btn-primary btn-sm add-exercise">Add Exercise</button>
+        </div>
+    </div>
+
+    <!-- Exercise Template -->
+    <div class="exercise-template">
+        <div class="exercise mb-2">
+            <input type="text" class="form-control mb-1" name="muscleGroups[].exercises[].exerciseName"
+                   th:placeholder="#{workout.exercise.name.placeholder}" required>
+            <div class="sets"></div>
+            <button type="button" class="btn btn-secondary btn-sm add-set">Add Set</button>
+            <button type="button" class="btn btn-danger btn-sm remove-exercise">Remove Exercise</button>
+        </div>
+    </div>
+
+    <!-- Set Template -->
+    <div class="set-template">
+        <div class="set d-flex gap-1 mb-1">
+            <input type="number" class="form-control" name="muscleGroups[].exercises[].sets[].repetitions"
+                   th:placeholder="#{set.reps.placeholder}" required>
+            <input type="number" step="0.25" class="form-control" name="muscleGroups[].exercises[].sets[].weightKg"
+                   th:placeholder="#{set.weight.placeholder}" required>
+            <button type="button" class="btn btn-warning btn-sm remove-set">-</button>
+        </div>
+    </div>
+</div>
+
 <footer class="common-footer">
     <div>&copy; 2025 GymLog</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/scripts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => setTimeout(() => new bootstrap.Alert(alert).close(), 5000));
+
+        const newWorkoutBtn = document.getElementById('newWorkoutBtn');
+        const workoutForm = document.getElementById('workoutForm');
+        const cancelFormBtn = document.querySelector('.cancel-form');
+        const muscleGroupsContainer = document.getElementById('muscleGroups');
+
+        // Templates
+        const muscleGroupTemplate = document.querySelector('.muscle-group-template .muscle-group');
+        const exerciseTemplate = document.querySelector('.exercise-template .exercise');
+        const setTemplate = document.querySelector('.set-template .set');
+
+        // Toggle form visibility
+        if (newWorkoutBtn && workoutForm) {
+            newWorkoutBtn.addEventListener('click', () => {
+                workoutForm.classList.remove('d-none');
+                newWorkoutBtn.classList.add('d-none');
+                addInitialMuscleGroup();
+            });
+
+            cancelFormBtn.addEventListener('click', () => {
+                workoutForm.classList.add('d-none');
+                newWorkoutBtn.classList.remove('d-none');
+                muscleGroupsContainer.innerHTML = '';
+            });
+        }
+
+        function addInitialMuscleGroup() {
+            const newGroup = cloneMuscleGroup();
+            muscleGroupsContainer.appendChild(newGroup);
+            addExerciseToGroup(newGroup);
+            reindexForm();
+        }
+
+        // Event delegation
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('add-group')) {
+                const newGroup = cloneMuscleGroup();
+                muscleGroupsContainer.appendChild(newGroup);
+                addExerciseToGroup(newGroup);
+                reindexForm();
+            }
+            else if (e.target.classList.contains('remove-group')) {
+                e.target.closest('.muscle-group').remove();
+                reindexForm();
+            }
+            else if (e.target.classList.contains('add-exercise')) {
+                const group = e.target.closest('.muscle-group');
+                addExerciseToGroup(group);
+                reindexForm();
+            }
+            else if (e.target.classList.contains('remove-exercise')) {
+                e.target.closest('.exercise').remove();
+                reindexForm();
+            }
+            else if (e.target.classList.contains('add-set')) {
+                const exercise = e.target.closest('.exercise');
+                addSetToExercise(exercise);
+                reindexForm();
+            }
+            else if (e.target.classList.contains('remove-set')) {
+                e.target.closest('.set').remove();
+                reindexForm();
+            }
+        });
+
+        // Cloning functions
+        function cloneMuscleGroup() {
+            const newGroup = muscleGroupTemplate.cloneNode(true);
+            newGroup.querySelectorAll('input').forEach(input => input.value = '');
+            return newGroup;
+        }
+
+        function addExerciseToGroup(group) {
+            const exercise = exerciseTemplate.cloneNode(true);
+            const exercisesContainer = group.querySelector('.exercises');
+            exercisesContainer.appendChild(exercise);
+            addSetToExercise(exercise);
+        }
+
+        function addSetToExercise(exercise) {
+            const set = setTemplate.cloneNode(true);
+            const setsContainer = exercise.querySelector('.sets');
+            setsContainer.appendChild(set);
+        }
+
+        // Reindexing logic
+        function reindexForm() {
+            document.querySelectorAll('.muscle-group').forEach((group, groupIndex) => {
+                // Update muscle group fields
+                group.querySelectorAll('[name*="muscleGroups["]').forEach(el => {
+                    el.name = el.name.replace(/muscleGroups\[\d*\]/g, `muscleGroups[${groupIndex}]`);
+                });
+
+                // Update exercises
+                group.querySelectorAll('.exercise').forEach((exercise, exerciseIndex) => {
+                    exercise.querySelectorAll('[name*="exercises["]').forEach(el => {
+                        el.name = el.name.replace(/exercises\[\d*\]/g, `exercises[${exerciseIndex}]`);
+                    });
+
+                    // Update sets
+                    exercise.querySelectorAll('.set').forEach((set, setIndex) => {
+                        set.querySelectorAll('[name*="sets["]').forEach(el => {
+                            el.name = el.name.replace(/sets\[\d*\]/g, `sets[${setIndex}]`);
+                        });
+                    });
+                });
+            });
+        }
+    });
+</script>
 </body>
 </html>
