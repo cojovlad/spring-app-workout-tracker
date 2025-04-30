@@ -1,5 +1,6 @@
-package com.example.spring_app_workout_tracker.entity;
+package com.example.spring_app_workout_tracker.entity.workout;
 
+import com.example.spring_app_workout_tracker.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +9,9 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -44,6 +47,12 @@ public class Workout {
     @JoinColumn(name = "parent_template_id")
     @ToString.Exclude
     private Workout parentTemplate;
+
+    @OneToMany(mappedBy = "parentTemplate", fetch = FetchType.LAZY)
+    private List<Workout> childWorkouts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkoutExercise> workoutExercises = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

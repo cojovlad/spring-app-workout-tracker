@@ -143,3 +143,6 @@ CREATE INDEX idx_user_workouts_date ON user_workouts(user_id, scheduled_date);
 CREATE INDEX idx_recurring_active ON recurring_schedules(user_id, active);
 CREATE INDEX idx_exercise_creator ON exercises(created_by_user_id);
 
+ALTER TABLE workout_exercises
+    ADD COLUMN muscle_part_id BIGINT NOT NULL,
+    ADD FOREIGN KEY (muscle_part_id) REFERENCES muscle_parts(id);

@@ -1,4 +1,4 @@
-package com.example.spring_app_workout_tracker.entity;
+package com.example.spring_app_workout_tracker.entity.workout;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -34,6 +34,10 @@ public class WorkoutExercise {
     @Column(name = "sort_order", nullable = false)
     @Min(1) @Max(100)
     private Integer sortOrder;
+
+    @ManyToOne
+    @JoinColumn(name = "muscle_part_id", nullable = false)
+    private MusclePart musclePart;
 
     @Lob
     private String notes;

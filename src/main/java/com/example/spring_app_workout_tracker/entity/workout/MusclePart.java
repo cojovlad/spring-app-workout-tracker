@@ -1,4 +1,4 @@
-package com.example.spring_app_workout_tracker.entity;
+package com.example.spring_app_workout_tracker.entity.workout;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

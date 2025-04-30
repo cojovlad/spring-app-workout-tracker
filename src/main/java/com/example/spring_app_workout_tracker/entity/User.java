@@ -1,5 +1,9 @@
 package com.example.spring_app_workout_tracker.entity;
 
+import com.example.spring_app_workout_tracker.entity.workout.Exercise;
+import com.example.spring_app_workout_tracker.entity.workout.RecurringSchedule;
+import com.example.spring_app_workout_tracker.entity.workout.UserWorkout;
+import com.example.spring_app_workout_tracker.entity.workout.Workout;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -84,10 +88,6 @@ public class User implements UserDetails {
             orphanRemoval = true,
             fetch = FetchType.LAZY)
     private List<RecurringSchedule> recurringSchedules = new ArrayList<>();
-
-    @OneToMany(mappedBy = "parentTemplate",
-            fetch = FetchType.LAZY)
-    private List<Workout> childWorkouts = new ArrayList<>();
 
     @PrePersist
     void prePersist() {
