@@ -146,3 +146,21 @@ CREATE INDEX idx_exercise_creator ON exercises(created_by_user_id);
 ALTER TABLE workout_exercises
     ADD COLUMN muscle_part_id BIGINT NOT NULL,
     ADD FOREIGN KEY (muscle_part_id) REFERENCES muscle_parts(id);
+
+-- Insert default muscle parts
+INSERT INTO muscle_parts (name) VALUES
+                                    ('Chest'),
+                                    ('Back'),
+                                    ('Legs'),
+                                    ('Shoulders'),
+                                    ('Biceps'),
+                                    ('Triceps'),
+                                    ('Abs'),
+                                    ('Glutes'),
+                                    ('Hamstrings'),
+                                    ('Calves'),
+                                    ('Forearms'),
+                                    ('Traps'),
+                                    ('Lats'),
+                                    ('Quadriceps'),
+                                    ('Obliques');

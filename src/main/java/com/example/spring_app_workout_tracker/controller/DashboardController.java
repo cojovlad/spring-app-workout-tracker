@@ -3,7 +3,10 @@ package com.example.spring_app_workout_tracker.controller;
 import com.example.spring_app_workout_tracker.dto.workout.WorkoutRequest;
 import com.example.spring_app_workout_tracker.entity.User;
 import com.example.spring_app_workout_tracker.entity.workout.Workout;
+import com.example.spring_app_workout_tracker.repository.workout.MusclePartRepository;
 import com.example.spring_app_workout_tracker.service.WorkoutService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,33 +21,30 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping("api/v1/dashboard")
+@RequestMapping("/api/v1/dashboard")
+@RequiredArgsConstructor
 public class DashboardController {
 
-    public final WorkoutService workoutService;
-
-    @Autowired
-    public DashboardController(WorkoutService workoutService) {
-        this.workoutService = workoutService;
-    }
+    private final WorkoutService workoutService;
+    private final MusclePartRepository musclePartRepository;
 
     @GetMapping
     public String showDashboard(Model model, @AuthenticationPrincipal User user) {
-        // Get user's workouts
-        List<Workout> workouts = workoutService.getWorkoutsByUser(user);
-        model.addAttribute("workouts", workouts);
+        model.addAttribute("muscleParts", musclePartRepository.findAll());
+        model.addAttribute("workouts", workoutService.getWorkoutsByUser(user));
         model.addAttribute("workoutRequest", new WorkoutRequest());
         return "dashboard";
     }
 
     @PostMapping("/workouts")
-    public String createWorkout(@ModelAttribute WorkoutRequest workoutRequest,
+    public String createWorkout(@Valid @ModelAttribute WorkoutRequest workoutRequest,
                                 BindingResult result,
                                 @AuthenticationPrincipal User user,
                                 RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Invalid workout data");
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.workoutRequest", result);
+            redirectAttributes.addFlashAttribute("workoutRequest", workoutRequest);
             return "redirect:/api/v1/dashboard";
         }
 

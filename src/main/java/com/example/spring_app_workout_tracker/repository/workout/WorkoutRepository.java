@@ -16,12 +16,10 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
     List<Workout> findByCreatedBy(User user);
     List<Workout> findByParentTemplate(Workout template);
     boolean existsByNameAndCreatedBy(String name, User createdBy);
-    @EntityGraph(attributePaths = {
-            "workoutExercises",
-            "workoutExercises.exercise",
-            "workoutExercises.exerciseSets"
-    })
-    @Query("SELECT w FROM Workout w WHERE w.id = :id")
+    @Query("SELECT DISTINCT w FROM Workout w " +
+            "LEFT JOIN FETCH w.workoutExercises we " +
+            "LEFT JOIN FETCH we.exerciseSets " +
+            "WHERE w.id = :id")
     Optional<Workout> findByIdWithDetails(@Param("id") Long id);
     List<Workout> findByCreatedByAndType(User createdBy, Workout.Type type);
 }

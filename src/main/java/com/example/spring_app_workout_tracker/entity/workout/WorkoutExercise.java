@@ -8,6 +8,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -39,6 +44,9 @@ public class WorkoutExercise {
     @JoinColumn(name = "muscle_part_id", nullable = false)
     private MusclePart musclePart;
 
-    @Lob
+    @OneToMany(mappedBy = "workoutExercise", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ExerciseSet> exerciseSets = new HashSet<>();
+
+    @Column(columnDefinition = "TEXT")
     private String notes;
 }

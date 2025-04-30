@@ -1,6 +1,5 @@
 package com.example.spring_app_workout_tracker.entity.workout;
 
-import com.example.spring_app_workout_tracker.dto.ExerciseMuscleTargetId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,18 +9,18 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "exercise_muscle_targets")
+@Table(name="exercise_muscle_targets")
 public class ExerciseMuscleTarget {
     @EmbeddedId
     private ExerciseMuscleTargetId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("exerciseId")
-    @JoinColumn(name = "exercise_id", nullable = false)
+    @JoinColumn(name = "exercise_id")
     private Exercise exercise;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("musclePartId")
-    @JoinColumn(name = "muscle_part_id", nullable = false)
+    @JoinColumn(name = "muscle_part_id")
     private MusclePart musclePart;
 }

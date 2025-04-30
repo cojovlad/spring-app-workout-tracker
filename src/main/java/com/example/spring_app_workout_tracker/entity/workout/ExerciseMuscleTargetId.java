@@ -1,4 +1,4 @@
-package com.example.spring_app_workout_tracker.dto;
+package com.example.spring_app_workout_tracker.entity.workout;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -12,4 +12,12 @@ import lombok.NoArgsConstructor;
 public class ExerciseMuscleTargetId implements java.io.Serializable {
     private Long exerciseId;
     private Long musclePartId;
+
+    public void setExerciseId(Long exerciseId) {
+        this.exerciseId = exerciseId;
+    }
+
+    public void setMusclePartId(Long musclePartId) {
+        this.musclePartId = musclePartId;
+    }
 }

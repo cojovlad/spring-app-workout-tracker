@@ -1,13 +1,12 @@
 package com.example.spring_app_workout_tracker.service.impl;
 
+import com.example.spring_app_workout_tracker.entity.workout.ExerciseMuscleTargetId;
 import com.example.spring_app_workout_tracker.dto.workout.ExerciseRequest;
 import com.example.spring_app_workout_tracker.dto.workout.MuscleGroupRequest;
 import com.example.spring_app_workout_tracker.dto.workout.SetRequest;
 import com.example.spring_app_workout_tracker.dto.workout.WorkoutRequest;
 import com.example.spring_app_workout_tracker.entity.*;
 import com.example.spring_app_workout_tracker.entity.workout.*;
-import com.example.spring_app_workout_tracker.exception.ExerciseNotFoundException;
-import com.example.spring_app_workout_tracker.exception.ExerciseNotTargetingMuscleException;
 import com.example.spring_app_workout_tracker.exception.MusclePartNotFoundException;
 import com.example.spring_app_workout_tracker.repository.workout.*;
 import com.example.spring_app_workout_tracker.service.WorkoutService;
@@ -32,7 +31,6 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final ExerciseSetRepository exerciseSetRepository;
 
     public Workout createWorkoutTemplate(WorkoutRequest request, User user) {
-        // Create and persist the workout template
         Workout workout = new Workout();
         workout.setName(request.getName());
         workout.setDescription(request.getDescription());
@@ -40,23 +38,21 @@ public class WorkoutServiceImpl implements WorkoutService {
         workout.setCreatedBy(user);
         workout = workoutRepository.save(workout);
 
-        AtomicInteger globalSortOrder = new AtomicInteger(1);  // Maintain global ordering across all muscle groups
+        AtomicInteger globalSortOrder = new AtomicInteger(1);
 
         for (MuscleGroupRequest muscleGroup : request.getMuscleGroups()) {
             processMuscleGroup(workout, muscleGroup, user, globalSortOrder);
         }
 
         return workoutRepository.findByIdWithDetails(workout.getId())
-                .orElse(workout); // Handle fetch if needed
+                .orElse(workout);
     }
 
     private void processMuscleGroup(Workout workout, MuscleGroupRequest muscleGroup,
                                     User user, AtomicInteger globalSortOrder) {
-        // Resolve muscle part
         MusclePart musclePart = musclePartRepository.findByName(muscleGroup.getMuscleName())
                 .orElseThrow(() -> new MusclePartNotFoundException(muscleGroup.getMuscleName()));
 
-        // Process each exercise in order
         for (ExerciseRequest exerciseReq : muscleGroup.getExercises()) {
             processExercise(workout, musclePart, exerciseReq, user, globalSortOrder);
         }
@@ -64,16 +60,18 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     private void processExercise(Workout workout, MusclePart musclePart,
                                  ExerciseRequest exerciseReq, User user, AtomicInteger globalSortOrder) {
-        // Resolve exercise
-        Exercise exercise = exerciseRepository.findByNameAndCreatedBy(exerciseReq.getExerciseName(), user)
-                .orElseThrow(() -> new ExerciseNotFoundException(exerciseReq.getExerciseName()));
 
-        // Validate exercise targets the muscle
-        if (!exerciseMuscleTargetRepository.existsByExerciseAndMusclePart(exercise, musclePart)) {
-            throw new ExerciseNotTargetingMuscleException(exercise.getName(), musclePart.getName());
-        }
+        Exercise exercise = new Exercise();
+        exercise.setName(exerciseReq.getExerciseName());
+        exercise.setCreatedBy(user);
+        exercise = exerciseRepository.save(exercise);
 
-        // Create workout exercise
+        ExerciseMuscleTarget target = new ExerciseMuscleTarget();
+        target.setId(new ExerciseMuscleTargetId());
+        target.setExercise(exercise);
+        target.setMusclePart(musclePart);
+        exerciseMuscleTargetRepository.save(target);
+
         WorkoutExercise workoutExercise = new WorkoutExercise();
         workoutExercise.setWorkout(workout);
         workoutExercise.setExercise(exercise);
@@ -82,7 +80,6 @@ public class WorkoutServiceImpl implements WorkoutService {
         workoutExercise.setNotes(exerciseReq.getNotes());
         workoutExercise = workoutExerciseRepository.save(workoutExercise);
 
-        // Process sets
         processSets(exerciseReq.getSets(), workoutExercise);
     }
 

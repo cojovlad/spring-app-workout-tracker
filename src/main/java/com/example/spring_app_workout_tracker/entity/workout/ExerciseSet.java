@@ -39,4 +39,5 @@ public class ExerciseSet {
     @Column(name = "rest_seconds")
     @Min(0) @Max(600)
     private Integer restSeconds;
+
 }

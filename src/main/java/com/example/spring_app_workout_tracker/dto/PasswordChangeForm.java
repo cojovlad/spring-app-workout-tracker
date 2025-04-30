@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class PasswordChangeForm {
 
-    // Getters and setters
     @NotBlank(message = "Current password is required")
     private String currentPassword;
 

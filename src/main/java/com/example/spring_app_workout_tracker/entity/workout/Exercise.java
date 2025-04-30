@@ -14,11 +14,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "exercises",
-        uniqueConstraints = @UniqueConstraint(
-                columnNames = {"name", "created_by_user_id"}
-        )
-)
+@Table(name = "exercises")
 public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +24,7 @@ public class Exercise {
     private String name;
 
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

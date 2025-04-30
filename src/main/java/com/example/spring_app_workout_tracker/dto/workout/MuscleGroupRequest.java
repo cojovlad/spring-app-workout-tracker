@@ -1,4 +1,3 @@
-// MuscleGroupRequest.java
 package com.example.spring_app_workout_tracker.dto.workout;
 
 import jakarta.validation.constraints.*;
@@ -7,9 +6,9 @@ import java.util.List;
 
 @Data
 public class MuscleGroupRequest {
-    @NotBlank @Size(max = 50)
+    @NotBlank(message = "Muscle group selection is required")
     private String muscleName;
 
-    @NotEmpty
+    @NotEmpty(message = "At least one exercise required per muscle group")
     private List<ExerciseRequest> exercises;
 }

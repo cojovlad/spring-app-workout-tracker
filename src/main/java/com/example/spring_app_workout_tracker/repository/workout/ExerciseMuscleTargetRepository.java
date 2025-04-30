@@ -1,6 +1,6 @@
 package com.example.spring_app_workout_tracker.repository.workout;
 
-import com.example.spring_app_workout_tracker.dto.ExerciseMuscleTargetId;
+import com.example.spring_app_workout_tracker.entity.workout.ExerciseMuscleTargetId;
 import com.example.spring_app_workout_tracker.entity.workout.Exercise;
 import com.example.spring_app_workout_tracker.entity.workout.ExerciseMuscleTarget;
 import com.example.spring_app_workout_tracker.entity.workout.MusclePart;

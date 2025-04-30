@@ -1,4 +1,3 @@
-// SetRequest.java
 package com.example.spring_app_workout_tracker.dto.workout;
 
 import jakarta.validation.constraints.*;

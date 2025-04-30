@@ -9,9 +9,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Data
@@ -30,7 +28,7 @@ public class Workout {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     public enum Type { TEMPLATE, INSTANCE }
@@ -52,7 +50,7 @@ public class Workout {
     private List<Workout> childWorkouts = new ArrayList<>();
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkoutExercise> workoutExercises = new ArrayList<>();
+    private Set<WorkoutExercise> workoutExercises = new HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
