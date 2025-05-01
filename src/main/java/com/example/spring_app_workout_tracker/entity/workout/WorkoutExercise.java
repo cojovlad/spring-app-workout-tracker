@@ -34,6 +34,7 @@ public class WorkoutExercise {
     private Integer sortOrder;
 
     @OneToMany(mappedBy = "workoutExercise", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("workoutExercise")
     private Set<ExerciseSet> exerciseSets = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

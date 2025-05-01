@@ -119,6 +119,4 @@ public class WorkoutServiceImpl implements WorkoutService {
         return workoutRepository.findByIdWithDetailsById(id)
                 .orElseThrow(() -> new WorkoutNotFoundException(id));
     }
-
-
 }

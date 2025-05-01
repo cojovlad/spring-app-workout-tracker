@@ -13,10 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -58,5 +55,21 @@ public class DashboardController {
         }
 
         return "redirect:/api/v1/dashboard";
+    }
+
+    @GetMapping("/workouts/{id}")
+    @Transactional
+    public String getWorkoutDetails(@PathVariable Long id,
+                                    @AuthenticationPrincipal User user,
+                                    Model model) {
+        // Add existing dashboard attributes
+        model.addAttribute("muscleParts", musclePartRepository.findAll());
+        model.addAttribute("workouts", workoutService.getWorkoutsByUser(user));
+        model.addAttribute("workoutRequest", new WorkoutRequest());
+
+        Workout workout = workoutService.getWorkoutById(id);
+        model.addAttribute("selectedWorkout", workout);
+
+        return "dashboard";
     }
 }

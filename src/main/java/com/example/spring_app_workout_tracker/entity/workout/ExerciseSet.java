@@ -1,5 +1,6 @@
 package com.example.spring_app_workout_tracker.entity.workout;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -38,5 +39,6 @@ public class ExerciseSet {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workout_exercise_id", nullable = false)
     @EqualsAndHashCode.Exclude
+    @JsonIgnore()
     private WorkoutExercise workoutExercise;
 }

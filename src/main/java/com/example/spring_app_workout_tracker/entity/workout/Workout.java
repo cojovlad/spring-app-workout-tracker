@@ -1,6 +1,8 @@
 package com.example.spring_app_workout_tracker.entity.workout;
 
 import com.example.spring_app_workout_tracker.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,9 +40,11 @@ public class Workout {
     private Type type = Type.TEMPLATE;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("workout")
     private Set<WorkoutExercise> workoutExercises = new HashSet<>();
 
     @OneToMany(mappedBy = "parentTemplate", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Workout> childWorkouts = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

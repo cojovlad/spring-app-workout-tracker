@@ -1,6 +1,7 @@
 package com.example.spring_app_workout_tracker.entity.workout;
 
 import com.example.spring_app_workout_tracker.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class Exercise {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_user_id", nullable = false)
+    @JsonIgnore
     private User createdBy;
 
     @CreationTimestamp
