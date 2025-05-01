@@ -16,7 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "exercises")
 public class Exercise {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

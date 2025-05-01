@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Table(name = "exercise_sets")
 public class ExerciseSet {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

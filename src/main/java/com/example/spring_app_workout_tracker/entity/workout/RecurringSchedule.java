@@ -16,7 +16,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "recurring_schedules")
 public class RecurringSchedule {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

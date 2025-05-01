@@ -6,12 +6,17 @@ import java.math.BigDecimal;
 
 @Data
 public class SetRequest {
-    @NotNull @Min(1) @Max(100)
+    @NotNull(message = "Repetitions are required")
+    @Min(value = 1, message = "Must do at least 1 repetition")
+    @Max(value = 100, message = "Maximum 100 repetitions allowed")
     private Integer repetitions;
 
-    @NotNull @DecimalMin("0.25") @DecimalMax("500.00")
+    @NotNull(message = "Weight is required")
+    @DecimalMin(value = "0.25", message = "Minimum weight is 0.25kg")
+    @DecimalMax(value = "500.00", message = "Maximum weight is 500kg")
     private BigDecimal weightKg;
 
-    @Min(0) @Max(600)
+    @Min(value = 0, message = "Rest time cannot be negative")
+    @Max(value = 600, message = "Maximum rest time is 600 seconds")
     private Integer restSeconds = 0;
 }

@@ -164,3 +164,24 @@ INSERT INTO muscle_parts (name) VALUES
                                     ('Lats'),
                                     ('Quadriceps'),
                                     ('Obliques');
+
+SELECT
+    w.*, we.*, e.*, mp.*, es.*
+FROM
+    workouts w
+        LEFT JOIN workout_exercises we ON w.id = we.workout_id
+        LEFT JOIN exercises e ON we.exercise_id = e.id
+        LEFT JOIN muscle_parts mp ON we.muscle_part_id = mp.id
+        LEFT JOIN exercise_sets es ON we.id = es.workout_exercise_id
+WHERE w.id = 16;
+
+-- Verify workout exists
+SELECT * FROM workouts WHERE id = 16;
+
+-- Check workout_exercises linkage
+SELECT * FROM workout_exercises WHERE workout_id = 16;
+
+-- Check exercise_sets linkage
+SELECT * FROM exercise_sets WHERE workout_exercise_id IN (
+    SELECT id FROM workout_exercises WHERE workout_id = 16
+);

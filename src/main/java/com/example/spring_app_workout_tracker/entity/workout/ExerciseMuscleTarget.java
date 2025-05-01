@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name="exercise_muscle_targets")
 public class ExerciseMuscleTarget {
-
     @EmbeddedId
     private ExerciseMuscleTargetId id;
 

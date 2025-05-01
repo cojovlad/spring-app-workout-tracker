@@ -1,5 +1,6 @@
 package com.example.spring_app_workout_tracker.dto.workout;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import java.util.List;
@@ -10,5 +11,5 @@ public class MuscleGroupRequest {
     private String muscleName;
 
     @NotEmpty(message = "At least one exercise required per muscle group")
-    private List<ExerciseRequest> exercises;
+    private List<@Valid ExerciseRequest> exercises;
 }

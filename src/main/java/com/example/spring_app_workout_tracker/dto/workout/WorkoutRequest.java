@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class WorkoutRequest {
     @NotBlank(message = "Workout name is required")
-    @Size(max = 100, message = "Name must be less than 100 characters")
+    @Size(max = 100, message = "Workout name must be less than 100 characters")
     private String name;
 
     @Size(max = 500, message = "Description must be less than 500 characters")
