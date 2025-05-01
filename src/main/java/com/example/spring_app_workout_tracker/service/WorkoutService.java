@@ -11,4 +11,6 @@ public interface WorkoutService {
     Workout createWorkoutTemplate(WorkoutRequest request, User user);
 
     List<Workout> getWorkoutsByUser(User user);
+
+    Workout getWorkoutById(Long id);
 }

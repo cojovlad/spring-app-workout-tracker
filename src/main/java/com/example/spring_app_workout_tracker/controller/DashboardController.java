@@ -5,6 +5,7 @@ import com.example.spring_app_workout_tracker.entity.User;
 import com.example.spring_app_workout_tracker.entity.workout.Workout;
 import com.example.spring_app_workout_tracker.repository.workout.MusclePartRepository;
 import com.example.spring_app_workout_tracker.service.WorkoutService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class DashboardController {
     private final MusclePartRepository musclePartRepository;
 
     @GetMapping
+    @Transactional
     public String showDashboard(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("muscleParts", musclePartRepository.findAll());
         model.addAttribute("workouts", workoutService.getWorkoutsByUser(user));

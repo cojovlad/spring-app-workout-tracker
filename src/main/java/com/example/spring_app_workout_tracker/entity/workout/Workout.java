@@ -37,6 +37,12 @@ public class Workout {
     @Column(nullable = false, length = 10)
     private Type type = Type.TEMPLATE;
 
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<WorkoutExercise> workoutExercises = new HashSet<>();
+
+    @OneToMany(mappedBy = "parentTemplate", fetch = FetchType.LAZY)
+    private List<Workout> childWorkouts = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_user_id", nullable = false)
     private User createdBy;
@@ -45,12 +51,6 @@ public class Workout {
     @JoinColumn(name = "parent_template_id")
     @ToString.Exclude
     private Workout parentTemplate;
-
-    @OneToMany(mappedBy = "parentTemplate", fetch = FetchType.LAZY)
-    private List<Workout> childWorkouts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<WorkoutExercise> workoutExercises = new HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

@@ -15,6 +15,7 @@ import java.util.Date;
 @Table(name = "muscle_parts",
         uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class MusclePart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

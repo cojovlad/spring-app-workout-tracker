@@ -15,14 +15,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Table(name = "exercise_sets")
 public class ExerciseSet {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workout_exercise_id", nullable = false)
-    @EqualsAndHashCode.Exclude
-    private WorkoutExercise workoutExercise;
 
     @Column(name = "set_number", nullable = false)
     @Min(1) @Max(20)
@@ -40,4 +36,8 @@ public class ExerciseSet {
     @Min(0) @Max(600)
     private Integer restSeconds;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workout_exercise_id", nullable = false)
+    @EqualsAndHashCode.Exclude
+    private WorkoutExercise workoutExercise;
 }

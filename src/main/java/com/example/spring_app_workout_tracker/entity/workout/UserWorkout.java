@@ -17,19 +17,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Table(name = "user_workouts")
 public class UserWorkout {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @ToString.Exclude
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workout_id", nullable = false)
-    @ToString.Exclude
-    private Workout workout;
 
     @Column(name = "scheduled_date", nullable = false)
     @FutureOrPresent
@@ -46,4 +37,14 @@ public class UserWorkout {
 
     @Column(nullable = false)
     private Boolean immutable = false;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workout_id", nullable = false)
+    @ToString.Exclude
+    private Workout workout;
 }

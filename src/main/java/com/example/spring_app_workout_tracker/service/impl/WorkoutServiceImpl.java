@@ -8,12 +8,14 @@ import com.example.spring_app_workout_tracker.dto.workout.WorkoutRequest;
 import com.example.spring_app_workout_tracker.entity.*;
 import com.example.spring_app_workout_tracker.entity.workout.*;
 import com.example.spring_app_workout_tracker.exception.MusclePartNotFoundException;
+import com.example.spring_app_workout_tracker.exception.WorkoutNotFoundException;
 import com.example.spring_app_workout_tracker.repository.workout.*;
 import com.example.spring_app_workout_tracker.service.WorkoutService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,6 +31,7 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final ExerciseMuscleTargetRepository exerciseMuscleTargetRepository;
     private final WorkoutExerciseRepository workoutExerciseRepository;
     private final ExerciseSetRepository exerciseSetRepository;
+    private final UserWorkoutRepository userWorkoutRepository;
 
     public Workout createWorkoutTemplate(WorkoutRequest request, User user) {
         Workout workout = new Workout();
@@ -44,7 +47,15 @@ public class WorkoutServiceImpl implements WorkoutService {
             processMuscleGroup(workout, muscleGroup, user, globalSortOrder);
         }
 
-        return workoutRepository.findByIdWithDetails(workout.getId())
+        UserWorkout userWorkout = new UserWorkout();
+        userWorkout.setUser(user);
+        userWorkout.setWorkout(workout);
+        userWorkout.setScheduledDate(LocalDate.now());
+        userWorkout.setStatus(UserWorkout.Status.PLANNED);
+
+        userWorkoutRepository.save(userWorkout);
+
+        return workoutRepository.findByIdWithDetailsById(workout.getId())
                 .orElse(workout);
     }
 
@@ -103,4 +114,11 @@ public class WorkoutServiceImpl implements WorkoutService {
     public List<Workout> getWorkoutsByUser(User user) {
         return workoutRepository.findByCreatedByAndType(user, Workout.Type.TEMPLATE);
     }
+
+    public Workout getWorkoutById(Long id) {
+        return workoutRepository.findByIdWithDetailsById(id)
+                .orElseThrow(() -> new WorkoutNotFoundException(id));
+    }
+
+
 }

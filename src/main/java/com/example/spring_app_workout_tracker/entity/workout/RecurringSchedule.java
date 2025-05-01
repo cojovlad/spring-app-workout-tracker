@@ -16,17 +16,10 @@ import java.util.Date;
 @AllArgsConstructor
 @Table(name = "recurring_schedules")
 public class RecurringSchedule {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "workout_id", nullable = false)
-    private Workout workout;
 
     @Column(name = "recurrence_rule", nullable = false, length = 100)
     private String recurrenceRule;
@@ -39,6 +32,14 @@ public class RecurringSchedule {
 
     @Column(nullable = false)
     private Boolean active = true;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workout_id", nullable = false)
+    private Workout workout;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

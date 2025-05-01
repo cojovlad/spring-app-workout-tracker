@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExerciseMuscleTargetId implements java.io.Serializable {
+
     private Long exerciseId;
     private Long musclePartId;
 

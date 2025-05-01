@@ -18,8 +18,10 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
     boolean existsByNameAndCreatedBy(String name, User createdBy);
     @Query("SELECT DISTINCT w FROM Workout w " +
             "LEFT JOIN FETCH w.workoutExercises we " +
+            "LEFT JOIN FETCH we.exercise " +
+            "LEFT JOIN FETCH we.musclePart " +
             "LEFT JOIN FETCH we.exerciseSets " +
             "WHERE w.id = :id")
-    Optional<Workout> findByIdWithDetails(@Param("id") Long id);
+    Optional<Workout> findByIdWithDetailsById(Long id);
     List<Workout> findByCreatedByAndType(User createdBy, Workout.Type type);
 }

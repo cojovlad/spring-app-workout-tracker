@@ -1,5 +1,7 @@
 package com.example.spring_app_workout_tracker.entity.workout;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -23,29 +25,31 @@ import java.util.Set;
         )
 )
 public class WorkoutExercise {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "sort_order", nullable = false)
+    @Min(1) @Max(100)
+    private Integer sortOrder;
+
+    @OneToMany(mappedBy = "workoutExercise", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ExerciseSet> exerciseSets = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workout_id", nullable = false)
     @EqualsAndHashCode.Exclude
+    @JsonIgnore
     private Workout workout;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
 
-    @Column(name = "sort_order", nullable = false)
-    @Min(1) @Max(100)
-    private Integer sortOrder;
-
     @ManyToOne
     @JoinColumn(name = "muscle_part_id", nullable = false)
     private MusclePart musclePart;
-
-    @OneToMany(mappedBy = "workoutExercise", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ExerciseSet> exerciseSets = new HashSet<>();
 
     @Column(columnDefinition = "TEXT")
     private String notes;
