@@ -3,18 +3,18 @@ package com.example.spring_app_workout_tracker.entity.workout;
 import com.example.spring_app_workout_tracker.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"user", "workout"})
+@EqualsAndHashCode(exclude = {"user", "workout"})
 @Table(name = "user_workouts")
 public class UserWorkout {
     @Id
@@ -25,7 +25,7 @@ public class UserWorkout {
     @FutureOrPresent
     private LocalDate scheduledDate;
 
-    public enum Status { PLANNED, COMPLETED, SKIPPED }
+    public enum Status {PLANNED, COMPLETED, SKIPPED}
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
@@ -39,11 +39,9 @@ public class UserWorkout {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @ToString.Exclude
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workout_id", nullable = false)
-    @ToString.Exclude
     private Workout workout;
 }

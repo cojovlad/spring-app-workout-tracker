@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface UserWorkoutRepository extends JpaRepository<UserWorkout, Long> {
     List<UserWorkout> findByUserAndScheduledDateBetween(User user, LocalDate start, LocalDate end);
+
     List<UserWorkout> findByWorkoutId(Long workoutId);
+
     boolean existsByUserAndWorkoutAndScheduledDate(User user, Workout workout, LocalDate date);
 }

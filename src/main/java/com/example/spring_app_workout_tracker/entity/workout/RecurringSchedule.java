@@ -2,18 +2,19 @@ package com.example.spring_app_workout_tracker.entity.workout;
 
 import com.example.spring_app_workout_tracker.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"user", "workout"})
+@EqualsAndHashCode(exclude = {"user", "workout"})
 @Table(name = "recurring_schedules")
 public class RecurringSchedule {
     @Id

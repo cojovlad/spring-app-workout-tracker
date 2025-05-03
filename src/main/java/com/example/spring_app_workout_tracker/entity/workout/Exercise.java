@@ -3,18 +3,19 @@ package com.example.spring_app_workout_tracker.entity.workout;
 import com.example.spring_app_workout_tracker.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"createdBy"})
+@EqualsAndHashCode(exclude = {"createdBy"})
 @Table(name = "exercises")
 public class Exercise {
     @Id

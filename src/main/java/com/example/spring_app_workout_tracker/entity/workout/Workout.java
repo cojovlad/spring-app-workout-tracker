@@ -2,21 +2,20 @@ package com.example.spring_app_workout_tracker.entity.workout;
 
 import com.example.spring_app_workout_tracker.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"workoutExercises", "childWorkouts", "parentTemplate"})
+@EqualsAndHashCode(exclude = {"workoutExercises", "childWorkouts", "parentTemplate"})
 @Table(name = "workouts",
         uniqueConstraints = @UniqueConstraint(
                 columnNames = {"name", "created_by_user_id"}
@@ -33,14 +32,14 @@ public class Workout {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    public enum Type { TEMPLATE, INSTANCE }
+    public enum Type {TEMPLATE, INSTANCE}
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private Type type = Type.TEMPLATE;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("workout")
+    @JsonIgnore
     private Set<WorkoutExercise> workoutExercises = new HashSet<>();
 
     @OneToMany(mappedBy = "parentTemplate", fetch = FetchType.LAZY)
@@ -53,7 +52,6 @@ public class Workout {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_template_id")
-    @ToString.Exclude
     private Workout parentTemplate;
 
     @CreationTimestamp

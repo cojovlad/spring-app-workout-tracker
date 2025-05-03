@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,9 +13,12 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"workout", "exerciseSets"})
+@EqualsAndHashCode(exclude = {"workout"})
 @Table(name = "workout_exercises",
         uniqueConstraints = @UniqueConstraint(
                 columnNames = {"workout_id", "sort_order"}
@@ -30,7 +30,8 @@ public class WorkoutExercise {
     private Long id;
 
     @Column(name = "sort_order", nullable = false)
-    @Min(1) @Max(100)
+    @Min(1)
+    @Max(100)
     private Integer sortOrder;
 
     @OneToMany(mappedBy = "workoutExercise", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,7 +40,6 @@ public class WorkoutExercise {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workout_id", nullable = false)
-    @EqualsAndHashCode.Exclude
     @JsonIgnore
     private Workout workout;
 

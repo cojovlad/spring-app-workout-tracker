@@ -7,7 +7,6 @@ import com.example.spring_app_workout_tracker.entity.workout.Workout;
 import java.util.List;
 
 public interface WorkoutService {
-
     Workout createWorkoutTemplate(WorkoutRequest request, User user);
 
     List<Workout> getWorkoutsByUser(User user);
@@ -15,4 +14,6 @@ public interface WorkoutService {
     Workout getWorkoutById(Long id);
 
     void deleteWorkout(Long id);
+
+    void updateWorkout(Long id, String request);
 }

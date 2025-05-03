@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -120,13 +122,13 @@ public class WorkoutServiceImpl implements WorkoutService {
                 .orElseThrow(() -> new WorkoutNotFoundException(id));
     }
 
-    public void deleteWorkout(Long id) {
-        workoutRepository.deleteById(id);
-    }
-
-    public Workout updateWorkout(Long id, String name) {
+    public void updateWorkout(Long id, String name) {
         Workout workout = workoutRepository.findById(id).orElseThrow();
         workout.setName(name);
-        return workoutRepository.save(workout);
+        workoutRepository.save(workout);
+    }
+
+    public void deleteWorkout(Long id) {
+        workoutRepository.deleteById(id);
     }
 }

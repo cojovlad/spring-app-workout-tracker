@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface MusclePartRepository extends JpaRepository<MusclePart, Long> {
     Optional<MusclePart> findByName(String name);
-    List<MusclePart> findAllByOrderByNameAsc();
 
+    List<MusclePart> findAllByOrderByNameAsc();
 }

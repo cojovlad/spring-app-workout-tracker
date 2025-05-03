@@ -12,21 +12,21 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class ExerciseSetServiceImpl implements ExerciseSetService {
-    private final ExerciseSetRepository repo;
+    private final ExerciseSetRepository exerciseSetRepository;
 
     @Override
     @Transactional
     public ExerciseSet updateSet(Long id, Integer reps, BigDecimal weightKg, Integer restSeconds) {
-        ExerciseSet s = repo.findById(id).orElseThrow();
-        if (reps != null) s.setRepetitions(reps);
-        if (weightKg != null) s.setWeightKg(weightKg);
-        if (restSeconds != null) s.setRestSeconds(restSeconds);
-        return repo.save(s);
+        ExerciseSet exerciseSet = exerciseSetRepository.findById(id).orElseThrow();
+        if (reps != null) exerciseSet.setRepetitions(reps);
+        if (weightKg != null) exerciseSet.setWeightKg(weightKg);
+        if (restSeconds != null) exerciseSet.setRestSeconds(restSeconds);
+        return exerciseSetRepository.save(exerciseSet);
     }
 
     @Override
     @Transactional
     public void deleteSet(Long id) {
-        repo.deleteById(id);
+        exerciseSetRepository.deleteById(id);
     }
 }

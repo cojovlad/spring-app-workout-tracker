@@ -1,15 +1,14 @@
 package com.example.spring_app_workout_tracker.entity.workout;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="exercise_muscle_targets")
+@Table(name = "exercise_muscle_targets")
 public class ExerciseMuscleTarget {
     @EmbeddedId
     private ExerciseMuscleTargetId id;

@@ -22,18 +22,9 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     @Transactional
     public Exercise updateExerciseName(Long id, String name) {
-        Exercise e = exerciseRepository.findById(id).orElseThrow();
-        e.setName(name);
-        return exerciseRepository.save(e);
-    }
-
-    @Override
-    @Transactional
-    public Exercise updateExercise(Long id, String name, String description) {
-        Exercise e = exerciseRepository.findById(id).orElseThrow();
-        e.setName(name);
-        e.setDescription(description);
-        return exerciseRepository.save(e);
+        Exercise exercise = exerciseRepository.findById(id).orElseThrow();
+        exercise.setName(name);
+        return exerciseRepository.save(exercise);
     }
 
     @Override
@@ -53,15 +44,24 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     @Transactional
     public void addMuscleTarget(Long exerciseId, Long musclePartId) {
-        Exercise e = exerciseRepository.findById(exerciseId).orElseThrow();
+        Exercise exercise = exerciseRepository.findById(exerciseId).orElseThrow();
         MusclePart m = musclePartRepository.findById(musclePartId).orElseThrow();
-        if (!exerciseMuscleTargetRepository.existsByExerciseAndMusclePart(e, m)) {
-            ExerciseMuscleTarget t = new ExerciseMuscleTarget();
-            t.setId(new ExerciseMuscleTargetId(e.getId(), m.getId()));
-            t.setExercise(e);
-            t.setMusclePart(m);
-            exerciseMuscleTargetRepository.save(t);
+        if (!exerciseMuscleTargetRepository.existsByExerciseAndMusclePart(exercise, m)) {
+            ExerciseMuscleTarget exerciseMuscleTarget = new ExerciseMuscleTarget();
+            exerciseMuscleTarget.setId(new ExerciseMuscleTargetId(exercise.getId(), m.getId()));
+            exerciseMuscleTarget.setExercise(exercise);
+            exerciseMuscleTarget.setMusclePart(m);
+            exerciseMuscleTargetRepository.save(exerciseMuscleTarget);
         }
+    }
+
+    @Override
+    @Transactional
+    public void updateExerciseMuscle(Long exerciseId, Long newMusclePartId) {
+        WorkoutExercise we = workoutExerciseRepository.findById(exerciseId).orElseThrow();
+        MusclePart m = musclePartRepository.findById(newMusclePartId).orElseThrow();
+        we.setMusclePart(m);
+        workoutExerciseRepository.save(we);
     }
 
     @Override
@@ -70,21 +70,5 @@ public class ExerciseServiceImpl implements ExerciseService {
         Exercise e = exerciseRepository.findById(exerciseId).orElseThrow();
         MusclePart m = musclePartRepository.findById(musclePartId).orElseThrow();
         exerciseMuscleTargetRepository.deleteByExerciseAndMusclePart(e, m);
-    }
-
-    @Override
-    @Transactional
-    public void updateExerciseMuscle(Long exerciseId, Long newMusclePartId) {
-        Exercise e = exerciseRepository.findById(exerciseId).orElseThrow();
-        MusclePart m = musclePartRepository.findById(newMusclePartId).orElseThrow();
-
-        List<ExerciseMuscleTarget> old = exerciseMuscleTargetRepository.findByExercise(e);
-        exerciseMuscleTargetRepository.deleteAll(old);
-
-        ExerciseMuscleTarget t = new ExerciseMuscleTarget();
-        t.setId(new ExerciseMuscleTargetId(e.getId(), m.getId()));
-        t.setExercise(e);
-        t.setMusclePart(m);
-        exerciseMuscleTargetRepository.save(t);
     }
 }

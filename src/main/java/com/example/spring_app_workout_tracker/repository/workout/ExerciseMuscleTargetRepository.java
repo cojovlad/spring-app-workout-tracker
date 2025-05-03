@@ -14,10 +14,14 @@ import java.util.List;
 @Repository
 public interface ExerciseMuscleTargetRepository extends JpaRepository<ExerciseMuscleTarget, ExerciseMuscleTargetId> {
     List<ExerciseMuscleTarget> findByExercise(Exercise exercise);
-    List<ExerciseMuscleTarget> findByMusclePart(MusclePart musclePart);
+
+    List<ExerciseMuscleTarget> findByMusclePart(MusclePart musclePart)
+            ;
     void deleteByExerciseAndMusclePart(Exercise exercise, MusclePart musclePart);
+
     @Query("SELECT COUNT(emt) > 0 FROM ExerciseMuscleTarget emt WHERE emt.exercise = :exercise AND emt.musclePart = :musclePart")
     boolean existsByExerciseAndMusclePart(@Param("exercise") Exercise exercise,
                                           @Param("musclePart") MusclePart musclePart);
+
     void deleteByExercise(Exercise exercise);
 }
