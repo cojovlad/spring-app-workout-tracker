@@ -13,4 +13,6 @@ public interface WorkoutService {
     List<Workout> getWorkoutsByUser(User user);
 
     Workout getWorkoutById(Long id);
+
+    void deleteWorkout(Long id);
 }

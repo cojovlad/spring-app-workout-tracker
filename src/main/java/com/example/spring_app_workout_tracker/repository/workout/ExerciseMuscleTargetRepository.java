@@ -19,4 +19,5 @@ public interface ExerciseMuscleTargetRepository extends JpaRepository<ExerciseMu
     @Query("SELECT COUNT(emt) > 0 FROM ExerciseMuscleTarget emt WHERE emt.exercise = :exercise AND emt.musclePart = :musclePart")
     boolean existsByExerciseAndMusclePart(@Param("exercise") Exercise exercise,
                                           @Param("musclePart") MusclePart musclePart);
+    void deleteByExercise(Exercise exercise);
 }

@@ -119,4 +119,14 @@ public class WorkoutServiceImpl implements WorkoutService {
         return workoutRepository.findByIdWithDetailsById(id)
                 .orElseThrow(() -> new WorkoutNotFoundException(id));
     }
+
+    public void deleteWorkout(Long id) {
+        workoutRepository.deleteById(id);
+    }
+
+    public Workout updateWorkout(Long id, String name) {
+        Workout workout = workoutRepository.findById(id).orElseThrow();
+        workout.setName(name);
+        return workoutRepository.save(workout);
+    }
 }
