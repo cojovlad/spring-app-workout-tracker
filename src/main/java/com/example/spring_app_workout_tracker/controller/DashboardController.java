@@ -1,5 +1,7 @@
 package com.example.spring_app_workout_tracker.controller;
 
+import com.example.spring_app_workout_tracker.dto.workout.AddExerciseRequest;
+import com.example.spring_app_workout_tracker.dto.workout.SetRequest;
 import com.example.spring_app_workout_tracker.dto.workout.WorkoutRequest;
 import com.example.spring_app_workout_tracker.entity.User;
 import com.example.spring_app_workout_tracker.repository.workout.MusclePartRepository;
@@ -31,11 +33,6 @@ public class DashboardController {
     private final ExerciseService exerciseService;
     private final ExerciseSetService setService;
     private final MusclePartService musclePartService;
-
-    private final WorkoutRepository workoutRepo;
-    private final MusclePartRepository musclePartRepo;
-    private final WorkoutExerciseRepository workoutExerciseRepository;
-    private final MusclePartRepository musclePartRepository;
 
     @GetMapping
     @Transactional
@@ -73,6 +70,27 @@ public class DashboardController {
         model.addAttribute("selectedWorkout", workoutService.getWorkoutById(id));
         model.addAttribute("workoutRequest", new WorkoutRequest());
         return "dashboard";
+    }
+
+    @PostMapping("/workouts/{workoutId}/exercises")
+    public String addExerciseToWorkout(@PathVariable Long workoutId,
+                                       @ModelAttribute AddExerciseRequest request,
+                                       @AuthenticationPrincipal User user,
+                                       HttpSession session,
+                                       RedirectAttributes redirectAttributes) {
+        exerciseService.createExerciseForWorkout(workoutId, request.getExerciseName(), request.getMusclePartId(), request.getSets(), user);
+        redirectAttributes.addFlashAttribute("success", "Exercise added");
+        return "redirect:/api/v1/dashboard/workouts/" + workoutId;
+    }
+
+    @PostMapping("/workout-exercises/{workoutExerciseId}/sets")
+    public String addSetToExercise(@PathVariable Long workoutExerciseId,
+                                   @ModelAttribute SetRequest request,
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
+        setService.createSet(workoutExerciseId, request);
+        redirectAttributes.addFlashAttribute("success", "Set added");
+        return "redirect:/api/v1/dashboard/workouts/" + session.getAttribute("currentWorkoutId");
     }
 
     @PostMapping("/workouts/{id}/update")

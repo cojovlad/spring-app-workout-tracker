@@ -12,7 +12,7 @@ public class SetRequest {
     private Integer repetitions;
 
     @NotNull(message = "Weight is required")
-    @DecimalMin(value = "0.25", message = "Minimum weight is 0.25kg")
+    @DecimalMin(value = "0.00", message = "Minimum weight is 0.00kg")
     @DecimalMax(value = "500.00", message = "Maximum weight is 500kg")
     private BigDecimal weightKg;
 

@@ -20,4 +20,7 @@ public interface WorkoutExerciseRepository extends JpaRepository<WorkoutExercise
 
     @Query("SELECT COUNT(we) FROM WorkoutExercise we WHERE we.exercise = :exercise")
     long countByExercise(@Param("exercise") Exercise exercise);
+
+    @Query("SELECT MAX(we.sortOrder) FROM WorkoutExercise we WHERE we.workout.id = :workoutId")
+    Integer findMaxSortOrder(@Param("workoutId") Long workoutId);
 }

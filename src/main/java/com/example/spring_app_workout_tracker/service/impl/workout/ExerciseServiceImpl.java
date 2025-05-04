@@ -1,6 +1,10 @@
 package com.example.spring_app_workout_tracker.service.impl.workout;
 
+import com.example.spring_app_workout_tracker.dto.workout.SetRequest;
+import com.example.spring_app_workout_tracker.entity.User;
 import com.example.spring_app_workout_tracker.entity.workout.*;
+import com.example.spring_app_workout_tracker.exception.MusclePartNotFoundException;
+import com.example.spring_app_workout_tracker.exception.WorkoutNotFoundException;
 import com.example.spring_app_workout_tracker.repository.workout.*;
 import com.example.spring_app_workout_tracker.service.workout.ExerciseService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final MusclePartRepository musclePartRepository;
     private final WorkoutExerciseRepository workoutExerciseRepository;
     private final ExerciseSetRepository exerciseSetRepository;
+    private final WorkoutRepository workoutRepository;
 
     @Override
     @Transactional
@@ -62,6 +67,50 @@ public class ExerciseServiceImpl implements ExerciseService {
         MusclePart m = musclePartRepository.findById(newMusclePartId).orElseThrow();
         we.setMusclePart(m);
         workoutExerciseRepository.save(we);
+    }
+
+    @Override
+    @Transactional
+    public Exercise createExerciseForWorkout(Long workoutId, String exerciseName, Long musclePartId, List<SetRequest> sets, User user) {
+        Workout workout = workoutRepository.findById(workoutId)
+                .orElseThrow(() -> new WorkoutNotFoundException(workoutId));
+
+        MusclePart musclePart = musclePartRepository.findById(musclePartId)
+                .orElseThrow(() -> new MusclePartNotFoundException((musclePartRepository.findById(musclePartId)).toString()));
+
+        Exercise exercise = new Exercise();
+        exercise.setName(exerciseName);
+        exercise.setCreatedBy(user);
+        exercise = exerciseRepository.save(exercise);
+
+        ExerciseMuscleTarget target = new ExerciseMuscleTarget();
+        target.setId(new ExerciseMuscleTargetId());
+        target.setExercise(exercise);
+        target.setMusclePart(musclePart);
+        exerciseMuscleTargetRepository.save(target);
+
+        WorkoutExercise workoutExercise = new WorkoutExercise();
+        workoutExercise.setWorkout(workout);
+        workoutExercise.setExercise(exercise);
+        workoutExercise.setMusclePart(musclePart);
+        workoutExercise.setSortOrder(workoutExerciseRepository.findMaxSortOrder(workoutId) == null ? 1 : workoutExerciseRepository.findMaxSortOrder(workoutId) + 1);
+        workoutExercise = workoutExerciseRepository.save(workoutExercise);
+
+        // Process sets
+        if (sets != null) {
+            int setNumber = 1;
+            for (SetRequest setRequest : sets) {
+                ExerciseSet exerciseSet = new ExerciseSet();
+                exerciseSet.setWorkoutExercise(workoutExercise);
+                exerciseSet.setSetNumber(setNumber++);
+                exerciseSet.setRepetitions(setRequest.getRepetitions());
+                exerciseSet.setWeightKg(setRequest.getWeightKg());
+                exerciseSet.setRestSeconds(setRequest.getRestSeconds());
+                exerciseSetRepository.save(exerciseSet);
+            }
+        }
+
+        return exercise;
     }
 
     @Override
