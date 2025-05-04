@@ -1,8 +1,8 @@
-package com.example.spring_app_workout_tracker.service.impl;
+package com.example.spring_app_workout_tracker.service.impl.workout;
 
 import com.example.spring_app_workout_tracker.entity.workout.ExerciseSet;
 import com.example.spring_app_workout_tracker.repository.workout.ExerciseSetRepository;
-import com.example.spring_app_workout_tracker.service.ExerciseSetService;
+import com.example.spring_app_workout_tracker.service.workout.ExerciseSetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

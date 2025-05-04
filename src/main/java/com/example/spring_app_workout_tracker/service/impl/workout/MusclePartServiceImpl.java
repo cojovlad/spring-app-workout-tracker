@@ -1,10 +1,10 @@
-package com.example.spring_app_workout_tracker.service.impl;
+package com.example.spring_app_workout_tracker.service.impl.workout;
 
 import com.example.spring_app_workout_tracker.entity.workout.MusclePart;
 import com.example.spring_app_workout_tracker.entity.workout.WorkoutExercise;
 import com.example.spring_app_workout_tracker.repository.workout.MusclePartRepository;
 import com.example.spring_app_workout_tracker.repository.workout.WorkoutExerciseRepository;
-import com.example.spring_app_workout_tracker.service.MusclePartService;
+import com.example.spring_app_workout_tracker.service.workout.MusclePartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.example.spring_app_workout_tracker.service;
+package com.example.spring_app_workout_tracker.service.workout;
 
 import com.example.spring_app_workout_tracker.entity.workout.ExerciseSet;
 
