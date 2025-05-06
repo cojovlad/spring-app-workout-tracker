@@ -47,3 +47,10 @@ p, span, label, .navbar-brand, .nav-link {
 .main-content {
     padding-bottom: 80px; /* footer height + a bit */
 }
+
+.header-icon {
+    display: block;           /* remove inline-img whitespace quirks */
+    width: 1.5rem;            /* or 24px, whatever you like */
+    height: 1.5rem;
+    object-fit: contain;      /* preserve aspect ratio */
+}

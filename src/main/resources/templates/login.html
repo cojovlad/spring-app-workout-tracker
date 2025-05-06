@@ -18,15 +18,18 @@
             <!-- Alerts -->
             <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
                 <span th:text="${error}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" th:attr="aria-label=#{common.close}"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                        th:attr="aria-label=#{alert.close}"></button>
             </div>
             <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
                 <span th:text="${success}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" th:attr="aria-label=#{common.close}"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                        th:attr="aria-label=#{alert.close}"></button>
             </div>
             <div th:if="${logoutMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
                 <span th:text="${logoutMessage}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" th:attr="aria-label=#{common.close}"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                        th:attr="aria-label=#{alert.close}"></button>
             </div>
 
             <form th:action="@{/api/v1/auth/login}" method="post">

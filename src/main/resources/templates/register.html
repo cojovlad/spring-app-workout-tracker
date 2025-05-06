@@ -16,12 +16,14 @@
         <div class="card-body">
             <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
                 <span th:text="${error}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" th:attr="aria-label=#{alert.close}"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                        th:attr="aria-label=#{alert.close}"></button>
             </div>
 
             <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
                 <span th:text="${success}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" th:attr="aria-label=#{alert.close}"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                        th:attr="aria-label=#{alert.close}"></button>
             </div>
 
             <form th:action="@{/api/v1/auth/register}" method="post" th:object="${user}">
@@ -52,7 +54,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="preferredLanguage" class="form-label" th:text="#{register.language}">Preferred Language</label>
+                    <label for="preferredLanguage" class="form-label" th:text="#{register.language}">Preferred
+                        Language</label>
                     <select class="form-select" id="preferredLanguage" th:field="*{preferredLanguage.id}">
                         <option th:each="lang : ${languages}"
                                 th:value="${lang.id}"
@@ -66,7 +69,8 @@
 
             <div class="mt-4 text-center">
                 <p th:text="#{register.existing.account}">Already have an account?
-                    <a th:href="@{/api/v1/auth/login}" class="fw-semibold" th:text="#{register.login.here}">Login here</a>
+                    <a th:href="@{/api/v1/auth/login}" class="fw-semibold" th:text="#{register.login.here}">Login
+                        here</a>
                 </p>
             </div>
         </div>

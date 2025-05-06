@@ -96,7 +96,6 @@ public class ExerciseServiceImpl implements ExerciseService {
         workoutExercise.setSortOrder(workoutExerciseRepository.findMaxSortOrder(workoutId) == null ? 1 : workoutExerciseRepository.findMaxSortOrder(workoutId) + 1);
         workoutExercise = workoutExerciseRepository.save(workoutExercise);
 
-        // Process sets
         if (sets != null) {
             int setNumber = 1;
             for (SetRequest setRequest : sets) {

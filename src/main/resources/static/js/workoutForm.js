@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const newWorkoutBtn = document.getElementById('newWorkoutBtn');
     const workoutForm = document.getElementById('workoutForm');
     const cancelFormBtn = document.querySelector('.cancel-form');
@@ -10,6 +10,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let formInitialized = false;
 
+    function handleMobileMenu() {
+        const sidebar = document.getElementById('sidebar');
+        if (window.innerWidth < 768) {
+            sidebar.classList.remove('mobile-sidebar-active');
+        } else {
+            sidebar.classList.add('mobile-sidebar-active');
+        }
+    }
+
+    window.addEventListener('resize', handleMobileMenu);
+    handleMobileMenu();
+
+    // Workout form initialization
     if (newWorkoutBtn && workoutForm) {
         newWorkoutBtn.addEventListener('click', () => {
             if (!formInitialized) {
@@ -35,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         reindexForm();
     }
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (!formInitialized) return;
 
         if (e.target.classList.contains('add-group')) {
@@ -43,26 +56,25 @@ document.addEventListener('DOMContentLoaded', function() {
             muscleGroupsContainer.appendChild(newGroup);
             addExerciseToGroup(newGroup);
             reindexForm();
-        }
-        else if (e.target.classList.contains('remove-group')) {
+        } else if (e.target.classList.contains('remove-group')) {
+            e.stopImmediatePropagation();
             e.target.closest('.muscle-group').remove();
             reindexForm();
-        }
-        else if (e.target.classList.contains('add-exercise')) {
+        } else if (e.target.classList.contains('add-exercise')) {
             const group = e.target.closest('.muscle-group');
             addExerciseToGroup(group);
             reindexForm();
-        }
-        else if (e.target.classList.contains('remove-exercise')) {
+        } else if (e.target.classList.contains('remove-exercise')) {
+            e.stopImmediatePropagation();
             e.target.closest('.exercise').remove();
             reindexForm();
-        }
-        else if (e.target.classList.contains('add-set')) {
+        } else if (e.target.classList.contains('add-set')) {
             const exercise = e.target.closest('.exercise');
             addSetToExercise(exercise);
             reindexForm();
-        }
-        else if (e.target.classList.contains('remove-set')) {
+        } else if (e.target.classList.contains('remove-set')) {
+            e.stopImmediatePropagation();
+
             e.target.closest('.set').remove();
             reindexForm();
         }

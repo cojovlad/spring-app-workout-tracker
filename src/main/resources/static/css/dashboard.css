@@ -1,45 +1,116 @@
-/* Sidebar: full-height and flush left/right */
-.sidebar {
-    height: 100vh;
-    background-color: #f8f9fa;
-    padding-top: 1rem;
+/* Mobile First Styles */
+@media (max-width: 767.98px) {
+    .mobile-sidebar {
+        position: fixed;
+        top: 56px; /* Height of your header */
+        bottom: 40px; /* Height of your footer */
+        left: -100%;
+        width: auto;
+        height: auto; /* Remove fixed height */
+        transition: left 0.3s;
+        z-index: 1000;
+        overflow-y: auto;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+
+    .mobile-sidebar-active {
+        left: 0;
+    }
+
+    .header-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .set-item .row {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        margin-right: -0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .set-item .col {
+        flex: 0 0 120px;
+        min-width: 120px;
+    }
+
+    .exercise-name,
+    .muscle-select {
+        max-width: 100% !important;
+    }
 }
 
-/* Remove Bootstrap grid gutters so sidebar sits flush */
-.row.g-0 {
-    --bs-gutter-x: 0;
-    --bs-gutter-y: 0;
+/* Desktop Overrides */
+@media (min-width: 768px) {
+    .mobile-sidebar {
+        left: 0 !important;
+        height: auto !important;
+        box-shadow: none;
+    }
+
+    #mobileMenuToggle {
+        display: none !important;
+    }
 }
 
-/* Workout Details Card */
-#workoutContent .card-header {
-    background-color: #f8f9fa;
-    border-bottom: 2px solid #e9ecef;
+/* General Improvements */
+.btn {
+    white-space: nowrap;
+    transition: all 0.2s;
 }
 
-.set-item {
-    transition: transform 0.2s;
+.form-control,
+.form-select {
+    background-image: none;
+    font-size: 0.9rem;
+    padding: 0.375rem 0.75rem;
 }
 
-.set-item:hover {
-    transform: translateX(5px);
-    background-color: #fff !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.workout-item {
+    font-size: 0.9rem;
+}
+
+.set-item input {
+    max-width: 80px;
+    min-width: 60px;
 }
 
 .sets-container {
-    border-left: 3px solid #0d6efd;
-    padding-left: 1.5rem;
+    scrollbar-width: thin;
 }
 
-.badge {
-    font-size: 0.9rem;
-    padding: 0.5em 0.75em;
+/* Better touch targets */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
 }
 
-/* Hide sidebar on small screens */
-@media (max-width: 767.98px) {
-    .sidebar {
-        display: none;
+/* Responsive tables */
+@media (max-width: 575.98px) {
+    .card-header input {
+        font-size: 1.1rem !important;
     }
+
+    .sets-container .row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .sets-container .col {
+        flex: 1 0 100%;
+        max-width: 100%;
+    }
+}
+
+.common-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;      /* sit above everything else */
+    background-color: #fff; /* or whatever your footer bg is */
+}
+body {
+    /* ensure your page content can scroll behind the footer */
+    padding-bottom: 2.5rem; /* at least the footer’s height */
 }
