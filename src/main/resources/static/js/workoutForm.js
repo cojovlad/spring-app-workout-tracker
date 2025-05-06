@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('resize', handleMobileMenu);
     handleMobileMenu();
 
-    // Workout form initialization
     if (newWorkoutBtn && workoutForm) {
         newWorkoutBtn.addEventListener('click', () => {
             if (!formInitialized) {
