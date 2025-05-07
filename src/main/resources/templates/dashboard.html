@@ -10,14 +10,16 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 <!-- Mobile Menu Toggle -->
-<button class="btn btn-primary d-md-none position-fixed top-0 end-0 m-3 z-3" id="mobileMenuToggle">
-    ☰
+<button class="btn btn-secondary position-fixed top-50 start-0 translate-middle-y rounded-end px-2 py-1" id="mobileMenuToggle">
+    ‎
+    ‎
+    ‎
 </button>
 
 <!-- Header Section -->
 <header class="common-header">
     <div class="container-fluid d-flex justify-content-between align-items-center p-2 p-md-3">
-        <h1 class="logo fs-4 fs-md-3 mb-0" th:text="#{dashboard.header.gymlog}">GymLog</h1>
+        <h1 class="logo mb-0" th:text="#{dashboard.header.gymlog}">GymLog</h1>
         <div class="d-flex align-items-center gap-2">
             <form action="/api/v1/language/set" method="post" class="d-flex">
                 <select class="form-select form-select-sm" name="code" onchange="this.form.submit()">
@@ -84,16 +86,14 @@
                 </div>
 
                 <div id="workoutsList" class="mt-2">
-                    <div th:each="workout : ${workouts}" class="workout-item mb-2 position-relative">
+                    <div th:each="workout : ${workouts}" class="workout-item mb-2 d-flex align-items-center gap-2">
                         <a th:href="@{/api/v1/dashboard/workouts/{id}(id=${workout.id})}"
-                           class="btn btn-outline-primary btn-sm w-100 text-start d-flex justify-content-between align-items-center pe-5">
+                           class="btn btn-outline-primary btn-sm flex-grow-1 text-start d-flex justify-content-between align-items-center pe-3">
                             <span th:text="${workout.name}" class="text-truncate"></span>
-                            <small class="text-muted ms-2"
-                                   th:text="${#dates.format(workout.createdAt, 'dd MMM')}"></small>
+                            <small class="text-muted ms-2" th:text="${#dates.format(workout.createdAt, 'dd MMM')}"></small>
                         </a>
-                        <form method="post" th:action="@{/api/v1/dashboard/workouts/{id}/delete(id=${workout.id})}"
-                              class="position-absolute top-50 end-0 translate-middle-y">
-                            <button type="submit" class="btn btn-danger btn-sm rounded-circle">×</button>
+                        <form method="post" th:action="@{/api/v1/dashboard/workouts/{id}/delete(id=${workout.id})}">
+                            <button type="submit" class="btn btn-danger btn-sm delete-btn-square">×</button>
                         </form>
                     </div>
                 </div>

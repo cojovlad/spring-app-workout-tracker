@@ -1,8 +1,8 @@
 @media (max-width: 767.98px) {
     .mobile-sidebar {
         position: fixed;
-        top: 56px;
-        bottom: 40px;
+        top: 70px;
+        bottom: 70px;
         left: -100%;
         width: auto;
         height: auto;
@@ -28,14 +28,20 @@
 }
 
 @media (min-width: 768px) {
-    .mobile-sidebar {
-        left: 0 !important;
-        height: auto !important;
+    .sidebar {
+        width: 250px;
+        position: fixed;
+        top: 70px;
+        bottom: 40px;
+        left: 0;
+        z-index: 999;
         box-shadow: none;
+        overflow-y: auto;
     }
 
-    #mobileMenuToggle {
-        display: none !important;
+    main {
+        margin-left: 250px; /* Match sidebar width */
+        width: calc(100% - 250px);
     }
 }
 
@@ -149,4 +155,65 @@ input[type="number"]::-webkit-inner-spin-button {
 
 input[type="number"] {
     -moz-appearance: textfield;
+}
+
+.delete-btn-square {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.workout-item {
+    gap: 0.5rem;
+}
+
+.workout-item a {
+    flex: 1;
+    min-width: 0; /* Allows truncation to work */
+}
+
+.delete-btn-square:hover {
+    background-color: #dc3545 !important;
+    opacity: 0.9;
+}
+
+/* Standardize workout button */
+#newWorkoutBtn {
+    height: 40px; /* Match header-btn height */
+    min-width: 120px; /* Match header-btn min-width */
+}
+
+@media (max-width: 767.98px) {
+    .muscle-select {
+        max-height: 150px;
+    }
+}
+
+.muscle-select {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* For better scrollbar styling */
+.muscle-select::-webkit-scrollbar {
+    width: 6px;
+}
+
+.muscle-select::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.muscle-select::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.muscle-select::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

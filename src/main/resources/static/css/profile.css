@@ -1,10 +1,8 @@
-/* Profile container */
 .profile-container {
     max-width: 900px;
     margin: 2rem auto;
 }
 
-/* Profile header */
 .profile-header {
     text-align: center;
     margin-bottom: 2rem;
@@ -26,7 +24,6 @@
     font-size: 1.1rem;
 }
 
-/* Profile detail cards */
 .profile-details {
     background-color: #f8f9fa;
     border-radius: .5rem;
@@ -56,8 +53,19 @@
     margin-bottom: .5rem;
 }
 
-/* Change-password form */
 .profile-details form {
     max-width: 600px;
     margin: 0 auto;
+}
+
+/* Profile Header Alignment */
+.profile-header {
+    margin-top: 1rem;
+}
+
+/* Match Form Button Heights */
+.profile-details .btn {
+    height: 40px;
+    min-width: 120px;
+    padding: 0.375rem 0.75rem;
 }
