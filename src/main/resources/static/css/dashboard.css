@@ -1,3 +1,4 @@
+/*dashboard.css*/
 @media (max-width: 767.98px) {
     .mobile-sidebar {
         position: fixed;
@@ -40,7 +41,7 @@
     }
 
     main {
-        margin-left: 250px; /* Match sidebar width */
+        margin-left: 250px;
         width: calc(100% - 250px);
     }
 }
@@ -175,7 +176,7 @@ input[type="number"] {
 
 .workout-item a {
     flex: 1;
-    min-width: 0; /* Allows truncation to work */
+    min-width: 0;
 }
 
 .delete-btn-square:hover {
@@ -183,10 +184,9 @@ input[type="number"] {
     opacity: 0.9;
 }
 
-/* Standardize workout button */
 #newWorkoutBtn {
-    height: 40px; /* Match header-btn height */
-    min-width: 120px; /* Match header-btn min-width */
+    height: 40px;
+    min-width: 120px;
 }
 
 @media (max-width: 767.98px) {
@@ -200,7 +200,6 @@ input[type="number"] {
     overflow-y: auto;
 }
 
-/* For better scrollbar styling */
 .muscle-select::-webkit-scrollbar {
     width: 6px;
 }

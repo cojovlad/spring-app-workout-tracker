@@ -1,120 +1,105 @@
+// workoutForm.js
 document.addEventListener('DOMContentLoaded', function () {
-    const newWorkoutBtn = document.getElementById('newWorkoutBtn');
-    const workoutForm = document.getElementById('workoutForm');
-    const cancelFormBtn = document.querySelector('.cancel-form');
-    const muscleGroupsContainer = document.getElementById('muscleGroups');
+    const newBtn = document.getElementById('newWorkoutBtn');
+    const formContainer = document.getElementById('workoutForm');
+    const cancelBtn = document.querySelector('.cancel-form');
+    const groupsContainer = document.getElementById('muscleGroups');
+    const groupTpl = document.querySelector('.muscle-group-template .muscle-group');
+    const exerTpl = document.querySelector('.exercise-template .exercise');
+    const setTpl = document.querySelector('.set-template .set');
 
-    const muscleGroupTemplate = document.querySelector('.muscle-group-template .muscle-group');
-    const exerciseTemplate = document.querySelector('.exercise-template .exercise');
-    const setTemplate = document.querySelector('.set-template .set');
+    let initialized = false;
 
-    let formInitialized = false;
-
-    function handleMobileMenu() {
-        const sidebar = document.getElementById('sidebar');
-        if (window.innerWidth < 768) {
-            sidebar.classList.remove('mobile-sidebar-active');
-        } else {
-            sidebar.classList.add('mobile-sidebar-active');
-        }
-    }
-
-    window.addEventListener('resize', handleMobileMenu);
-    handleMobileMenu();
-
-    if (newWorkoutBtn && workoutForm) {
-        newWorkoutBtn.addEventListener('click', () => {
-            if (!formInitialized) {
-                workoutForm.classList.remove('d-none');
-                newWorkoutBtn.classList.add('d-none');
-                addInitialMuscleGroup();
-                formInitialized = true;
-            }
-        });
-
-        cancelFormBtn.addEventListener('click', () => {
-            workoutForm.classList.add('d-none');
-            newWorkoutBtn.classList.remove('d-none');
-            muscleGroupsContainer.innerHTML = '';
-            formInitialized = false;
+    // Utility to update all input name indexes after DOM changes
+    function reindex() {
+        groupsContainer.querySelectorAll('.muscle-group').forEach((grp, gI) => {
+            grp.querySelectorAll('[name*="muscleGroups["]').forEach(el =>
+                el.name = el.name.replace(/muscleGroups\[\d*\]/, `muscleGroups[${gI}]`)
+            );
+            grp.querySelectorAll('.exercise').forEach((ex, eI) => {
+                ex.querySelectorAll('[name*="exercises["]').forEach(el =>
+                    el.name = el.name.replace(/exercises\[\d*\]/, `exercises[${eI}]`)
+                );
+                ex.querySelectorAll('.set').forEach((st, sI) => {
+                    st.querySelectorAll('[name*="sets["]').forEach(el =>
+                        el.name = el.name.replace(/sets\[\d*\]/, `sets[${sI}]`)
+                    );
+                });
+            });
         });
     }
 
-    function addInitialMuscleGroup() {
-        const newGroup = cloneMuscleGroup();
-        muscleGroupsContainer.appendChild(newGroup);
-        addExerciseToGroup(newGroup);
-        reindexForm();
+    function cloneGroup() {
+        const node = groupTpl.cloneNode(true);
+        node.querySelectorAll('input').forEach(i => i.value = '');
+        return node;
     }
 
-    document.addEventListener('click', function (e) {
-        if (!formInitialized) return;
+    function addGroup() {
+        const grp = cloneGroup();
+        groupsContainer.appendChild(grp);
+        addExercise(grp);
+        reindex();
+    }
 
-        if (e.target.classList.contains('add-group')) {
-            const newGroup = cloneMuscleGroup();
-            muscleGroupsContainer.appendChild(newGroup);
-            addExerciseToGroup(newGroup);
-            reindexForm();
-        } else if (e.target.classList.contains('remove-group')) {
-            e.stopImmediatePropagation();
-            e.target.closest('.muscle-group').remove();
-            reindexForm();
-        } else if (e.target.classList.contains('add-exercise')) {
-            const group = e.target.closest('.muscle-group');
-            addExerciseToGroup(group);
-            reindexForm();
-        } else if (e.target.classList.contains('remove-exercise')) {
-            e.stopImmediatePropagation();
-            e.target.closest('.exercise').remove();
-            reindexForm();
-        } else if (e.target.classList.contains('add-set')) {
-            const exercise = e.target.closest('.exercise');
-            addSetToExercise(exercise);
-            reindexForm();
-        } else if (e.target.classList.contains('remove-set')) {
-            e.stopImmediatePropagation();
+    function addExercise(grp) {
+        const ex = exerTpl.cloneNode(true);
+        grp.querySelector('.exercises').appendChild(ex);
+        addSet(ex);
+    }
 
-            e.target.closest('.set').remove();
-            reindexForm();
+    function addSet(ex) {
+        const st = setTpl.cloneNode(true);
+        ex.querySelector('.sets').appendChild(st);
+    }
+
+    // Show the workout form when "New Workout" button is clicked
+    newBtn.addEventListener('click', () => {
+        if (!initialized) {
+            formContainer.classList.remove('d-none');
+            newBtn.classList.add('d-none');
+            addGroup();
+            initialized = true;
         }
     });
 
-    function cloneMuscleGroup() {
-        const newGroup = muscleGroupTemplate.cloneNode(true);
-        newGroup.querySelectorAll('input').forEach(input => input.value = '');
-        return newGroup;
-    }
+    // Hide the workout form when "Cancel" button is clicked
+    cancelBtn.addEventListener('click', () => {
+        formContainer.classList.add('d-none');
+        newBtn.classList.remove('d-none');
+        groupsContainer.innerHTML = '';
+        initialized = false;
+    });
 
-    function addExerciseToGroup(group) {
-        const exercise = exerciseTemplate.cloneNode(true);
-        const exercisesContainer = group.querySelector('.exercises');
-        exercisesContainer.appendChild(exercise);
-        addSetToExercise(exercise);
-    }
+    // Handle dynamic form actions via event delegation
+    document.addEventListener('click', e => {
+        if (!initialized) return;
+        if (e.target.matches('.add-group')) {
+            addGroup();
+        } else if (e.target.matches('.remove-group')) {
+            e.stopImmediatePropagation();
+            e.target.closest('.muscle-group').remove();
+            reindex();
+        } else if (e.target.matches('.add-exercise')) {
+            addExercise(e.target.closest('.muscle-group'));
+            reindex();
+        } else if (e.target.matches('.remove-exercise')) {
+            e.stopImmediatePropagation();
+            e.target.closest('.exercise').remove();
+            reindex();
+        } else if (e.target.matches('.add-set')) {
+            addSet(e.target.closest('.exercise'));
+            reindex();
+        } else if (e.target.matches('.remove-set')) {
+            e.stopImmediatePropagation();
+            e.target.closest('.set').remove();
+            reindex();
+        }
+    });
 
-    function addSetToExercise(exercise) {
-        const set = setTemplate.cloneNode(true);
-        const setsContainer = exercise.querySelector('.sets');
-        setsContainer.appendChild(set);
-    }
-
-    function reindexForm() {
-        document.querySelectorAll('.muscle-group').forEach((group, groupIndex) => {
-            group.querySelectorAll('[name*="muscleGroups["]').forEach(el => {
-                el.name = el.name.replace(/muscleGroups\[\d*\]/g, `muscleGroups[${groupIndex}]`);
-            });
-
-            group.querySelectorAll('.exercise').forEach((exercise, exerciseIndex) => {
-                exercise.querySelectorAll('[name*="exercises["]').forEach(el => {
-                    el.name = el.name.replace(/exercises\[\d*\]/g, `exercises[${exerciseIndex}]`);
-                });
-
-                exercise.querySelectorAll('.set').forEach((set, setIndex) => {
-                    set.querySelectorAll('[name*="sets["]').forEach(el => {
-                        el.name = el.name.replace(/sets\[\d*\]/g, `sets[${setIndex}]`);
-                    });
-                });
-            });
-        });
-    }
+    // Keep sidebar open or closed based on screen size
+    window.addEventListener('resize', () => {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('mobile-sidebar-active', window.innerWidth >= 768);
+    });
 });

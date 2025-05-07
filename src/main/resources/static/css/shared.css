@@ -1,3 +1,4 @@
+/*shared.css*/
 body,
 h1, h2, h3, h4, h5, h6,
 p, span, label, .navbar-brand, .nav-link {
@@ -49,9 +50,8 @@ p, span, label, .navbar-brand, .nav-link {
     object-fit: contain;
 }
 
-/* Standard Header Height */
 .common-header {
-    height: 60px; /* Fixed height for all headers */
+    height: 60px;
     display: flex;
     align-items: center;
 }
@@ -63,7 +63,7 @@ p, span, label, .navbar-brand, .nav-link {
 
 /* Logo Size Consistency */
 .common-header .logo {
-    font-size: 1.5rem !important; /* Same size for all breakpoints */
+    font-size: 1.5rem !important;
 }
 
 /* Icon Button Consistency */
