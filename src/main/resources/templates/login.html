@@ -51,7 +51,8 @@
             </a>
 
             <div class="auth-footer mt-3 text-center">
-                <p th:text="#{login.register_question}">Don't have an account?
+                <p>
+                    <span th:text="#{login.register_question}">Don't have an account?</span>
                     <a th:href="@{/api/v1/auth/register}" th:text="#{login.register_link}">Register here</a>
                 </p>
             </div>
