@@ -1,5 +1,9 @@
 package com.example.spring_app_workout_tracker.entity;
 
+import com.example.spring_app_workout_tracker.entity.workout.Exercise;
+import com.example.spring_app_workout_tracker.entity.workout.RecurringSchedule;
+import com.example.spring_app_workout_tracker.entity.workout.UserWorkout;
+import com.example.spring_app_workout_tracker.entity.workout.Workout;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -12,7 +16,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Data
-@ToString(exclude = {"preferredLanguage", "roles"})
+@ToString(exclude = {"preferredLanguage", "roles",
+        "exercises", "workouts", "userWorkouts", "recurringSchedules"})
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -58,6 +63,31 @@ public class User implements UserDetails {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "createdBy",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Exercise> exercises = new ArrayList<>();
+
+    @OneToMany(mappedBy = "createdBy",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Workout> workouts = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<UserWorkout> userWorkouts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<RecurringSchedule> recurringSchedules = new ArrayList<>();
 
     @PrePersist
     void prePersist() {

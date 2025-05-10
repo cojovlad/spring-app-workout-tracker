@@ -1,19 +1,218 @@
-/* Sidebar: full-height and flush left/right */
-.sidebar {
-    height: 100vh;
-    background-color: #f8f9fa;
-    padding-top: 1rem;
-}
-
-/* Remove Bootstrap grid gutters so sidebar sits flush */
-.row.g-0 {
-    --bs-gutter-x: 0;
-    --bs-gutter-y: 0;
-}
-
-/* Hide sidebar on small screens */
+/*dashboard.css*/
 @media (max-width: 767.98px) {
-    .sidebar {
-        display: none;
+    .mobile-sidebar {
+        position: fixed;
+        top: 70px;
+        bottom: 70px;
+        left: -100%;
+        width: auto;
+        height: auto;
+        transition: left 0.3s;
+        z-index: 1000;
+        overflow-y: auto;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     }
+
+    .mobile-sidebar-active {
+        left: 0;
+    }
+
+    .header-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .exercise-name,
+    .muscle-select {
+        max-width: 100% !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        width: 250px;
+        position: fixed;
+        top: 70px;
+        bottom: 40px;
+        left: 0;
+        z-index: 999;
+        box-shadow: none;
+        overflow-y: auto;
+    }
+
+    main {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+    }
+}
+
+.btn {
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.form-control,
+.form-select {
+    background-image: none;
+    font-size: 0.9rem;
+    padding: 0.375rem 0.75rem;
+}
+
+.workout-item {
+    font-size: 0.9rem;
+}
+
+.set-item input {
+    max-width: 80px;
+    min-width: 60px;
+}
+
+.sets-container {
+    overflow-x: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 575.98px) {
+    .card-header input {
+        font-size: 1.1rem !important;
+    }
+
+    .sets-container .row {
+        flex-direction: row;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        gap: 0.5rem;
+    }
+
+    .sets-container .col {
+        flex: 1 0 100%;
+        max-width: 100%;
+    }
+}
+
+.common-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #fff;
+}
+
+body {
+    padding-bottom: 2.5rem;
+}
+
+.sets-container {
+    overflow-x: auto;
+}
+
+.set-item {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.set-item [class^="col"] {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+}
+
+.form-control-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+}
+
+.grid-header {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.5rem;
+    font-weight: 600;
+    background-color: #f8f9fa;
+    padding: 0.5rem;
+}
+
+.sets-container {
+    overflow-x: visible;
+}
+
+.set-item .form-control {
+    min-width: 50px;
+    max-width: 50%;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.delete-btn-square {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.workout-item {
+    gap: 0.5rem;
+}
+
+.workout-item a {
+    flex: 1;
+    min-width: 0;
+}
+
+.delete-btn-square:hover {
+    background-color: #dc3545 !important;
+    opacity: 0.9;
+}
+
+#newWorkoutBtn {
+    height: 40px;
+    min-width: 120px;
+}
+
+@media (max-width: 767.98px) {
+    .muscle-select {
+        max-height: 150px;
+    }
+}
+
+.muscle-select {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.muscle-select::-webkit-scrollbar {
+    width: 6px;
+}
+
+.muscle-select::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.muscle-select::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.muscle-select::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
