@@ -24,7 +24,7 @@ GymLog is a secure and mobile-responsive workout logging web application designe
 
 - **Secure Authentication:** Local login using JWT and social login integration (Google, Facebook) via OAuth2.
 - **Workout Logging:** Users can create personal workouts; trainers can assign workouts.
-- **Role-Based Access:** Support for three roles (User, Trainer, Administrator) with cumulative permissions.
+- **Role-Based Access:** Support for three roles (com.example.spring_app_workout_tracker.entity.User, Trainer, Administrator) with cumulative permissions.
 - **Real-Time Notifications:** WebSocket-based notifications for workout creation, updates, or trainer removal.
 - **Mobile Responsive UI:** Responsive design built with Thymeleaf and Bootstrap.
 - **Internationalization (I18n):** Multilingual support with resource bundles (EN, DE, ES).
@@ -38,7 +38,7 @@ GymLog is a secure and mobile-responsive workout logging web application designe
 GymLog follows a layered architecture with clearly defined responsibilities:
 
 1. **Domain Layer (Entities):**  
-   Java classes annotated with JPA to represent data models such as User, Role, UserTrainer, Workout, and WorkoutVersion.
+   Java classes annotated with JPA to represent data models such as com.example.spring_app_workout_tracker.entity.User, Role, UserTrainer, Workout, and WorkoutVersion.
 
 2. **Repository Layer:**  
    Interfaces extending Spring Data JPA repositories for data access.
@@ -65,7 +65,7 @@ GymLog follows a layered architecture with clearly defined responsibilities:
     - Views a list of assigned trainees with day-based management of workout schedules.
     - May also act as a user.
 
-- **User:**
+- **com.example.spring_app_workout_tracker.entity.User:**
     - Can create personal workouts.
     - Views daily workouts combining personal and trainer-assigned routines.
     - May have a single active trainer assigned.
@@ -130,11 +130,11 @@ GymLog follows a layered architecture with clearly defined responsibilities:
 ### 1. Authentication Module
 
 - **Entities:**
-    - `User` with fields: `Long id`, `String email`, `String passwordHash`, `String name`, `String timezone`, `Set<Role> roles`, `LocalDateTime createdAt`, `LocalDateTime updatedAt`.
+    - `com.example.spring_app_workout_tracker.entity.User` with fields: `Long id`, `String email`, `String passwordHash`, `String name`, `String timezone`, `Set<Role> roles`, `LocalDateTime createdAt`, `LocalDateTime updatedAt`.
     - `Role` with fields: `Long id`, `String roleName`.
 
 - **Repositories:**
-    - `UserRepository`: Extending `JpaRepository<User, Long>`, with methods like `findByEmail(String email)`.
+    - `UserRepository`: Extending `JpaRepository<com.example.spring_app_workout_tracker.entity.User, Long>`, with methods like `findByEmail(String email)`.
     - `RoleRepository`: Extending `JpaRepository<Role, Long>`.
 
 - **Services:**
@@ -149,13 +149,13 @@ GymLog follows a layered architecture with clearly defined responsibilities:
 ### 2. Role Management & Trainer Assignment
 
 - **Entity:**
-    - `UserTrainer` (Mapping): Fields - `Long id`, `User user`, `User trainer`, `LocalDate startDate`, `LocalDate endDate`, `boolean active`.
+    - `UserTrainer` (Mapping): Fields - `Long id`, `com.example.spring_app_workout_tracker.entity.User user`, `com.example.spring_app_workout_tracker.entity.User trainer`, `LocalDate startDate`, `LocalDate endDate`, `boolean active`.
 
 - **Repository:**
-    - `UserTrainerRepository`: Extends `JpaRepository<UserTrainer, Long>`, with a method like `findByUserAndActiveTrue(User user)`.
+    - `UserTrainerRepository`: Extends `JpaRepository<UserTrainer, Long>`, with a method like `findByUserAndActiveTrue(com.example.spring_app_workout_tracker.entity.User user)`.
 
 - **Service:**
-    - `TrainerService`: Methods such as `assignTrainer(User user, User trainer)`, `removeTrainer(User user)`, and `getTraineesForTrainer(User trainer)`.
+    - `TrainerService`: Methods such as `assignTrainer(com.example.spring_app_workout_tracker.entity.User user, com.example.spring_app_workout_tracker.entity.User trainer)`, `removeTrainer(com.example.spring_app_workout_tracker.entity.User user)`, and `getTraineesForTrainer(com.example.spring_app_workout_tracker.entity.User trainer)`.
 
 - **Controller:**
     - `TrainerController`: Endpoints like `POST /trainer/assign`, `POST /trainer/remove`, and `GET /trainer/my-trainees`.
@@ -163,16 +163,16 @@ GymLog follows a layered architecture with clearly defined responsibilities:
 ### 3. Workout System
 
 - **Entities:**
-    - `Workout`: Fields - `Long id`, `User user`, `User createdBy`, `Enum WorkoutType { PERSONAL, TRAINER }`, `LocalDate scheduledDate`, `String content`, `LocalDateTime createdAt`, `LocalDateTime updatedAt`.
-    - `WorkoutVersion`: Fields - `Long id`, `Workout workout`, `String diff`, `User modifiedBy`, `LocalDateTime modifiedAt`.
+    - `Workout`: Fields - `Long id`, `com.example.spring_app_workout_tracker.entity.User user`, `com.example.spring_app_workout_tracker.entity.User createdBy`, `Enum WorkoutType { PERSONAL, TRAINER }`, `LocalDate scheduledDate`, `String content`, `LocalDateTime createdAt`, `LocalDateTime updatedAt`.
+    - `WorkoutVersion`: Fields - `Long id`, `Workout workout`, `String diff`, `com.example.spring_app_workout_tracker.entity.User modifiedBy`, `LocalDateTime modifiedAt`.
 
 - **Repositories:**
-    - `WorkoutRepository`: Extending `JpaRepository<Workout, Long>` with custom queries such as `findByUserAndScheduledDate(User, LocalDate)`.
+    - `WorkoutRepository`: Extending `JpaRepository<Workout, Long>` with custom queries such as `findByUserAndScheduledDate(com.example.spring_app_workout_tracker.entity.User, LocalDate)`.
     - `WorkoutVersionRepository`: Extending `JpaRepository<WorkoutVersion, Long>`.
 
 - **Services:**
     - `WorkoutService`: Methods for creating, updating, deleting workouts, and retrieving daily workouts.
-    - `WorkoutVersionService`: To log changes via method `saveWorkoutVersion(Workout, String, User)`.
+    - `WorkoutVersionService`: To log changes via method `saveWorkoutVersion(Workout, String, com.example.spring_app_workout_tracker.entity.User)`.
 
 - **Controller:**
     - `WorkoutController`: REST endpoints – `POST /workouts`, `PUT /workouts/{id}`, `DELETE /workouts/{id}`, and `GET /workouts?date=...`.
@@ -244,9 +244,9 @@ Below is a sample list of API endpoints:
 
 ## End-to-End Flow
 
-1. **User Registration & Login:**
+1. **com.example.spring_app_workout_tracker.entity.User Registration & Login:**
     - A new user registers via the registration form (e.g., `register.html`) which is processed by `AuthController`.
-    - User data is persisted via `UserService` and `UserRepository`.
+    - com.example.spring_app_workout_tracker.entity.User data is persisted via `UserService` and `UserRepository`.
     - During login, if credentials are valid, a JWT token is generated by `AuthService` and returned to the client.
 
 2. **Role & Trainer Assignment:**

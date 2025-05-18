@@ -3,15 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GymLog Application User Stories & Implementation Roadmap</title>
+    <title>GymLog Application com.example.spring_app_workout_tracker.entity.User Stories & Implementation
+        Roadmap</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .story-title { font-weight: bold; }
-        .story-section { margin-bottom: 1rem; }
-        .criteria li { margin-bottom: .5rem; }
-        .implementation { background-color: #f1f1f1; padding: 0.75rem; border-radius: 0.25rem; margin-bottom: 1rem; }
-        .section-header { background-color: #e9ecef; padding: 1rem; border-radius: 0.25rem; margin-bottom: 1rem; }
+        .story-title {
+            font-weight: bold;
+        }
+
+        .story-section {
+            margin-bottom: 1rem;
+        }
+
+        .criteria li {
+            margin-bottom: .5rem;
+        }
+
+        .implementation {
+            background-color: #f1f1f1;
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header {
+            background-color: #e9ecef;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -26,15 +47,22 @@
             The application adheres to a layered architecture:
         </p>
         <ul>
-            <li><strong>Domain Layer:</strong> Java entities (User, Role, UserTrainer, Workout, WorkoutVersion) with JPA annotations.</li>
+            <li><strong>Domain Layer:</strong> Java entities (com.example.spring_app_workout_tracker.entity.User, Role,
+                UserTrainer, Workout, WorkoutVersion) with JPA annotations.
+            </li>
             <li><strong>Repository Layer:</strong> JPA repository interfaces for data access.</li>
-            <li><strong>Service Layer:</strong> Business logic for authentication, role management, workout processing, notifications, etc.</li>
-            <li><strong>Controller Layer:</strong> REST and web controllers exposing endpoints for Thymeleaf pages and real-time communications.</li>
-            <li>Additional support layers cover Security (JWT, OAuth2, CSRF, CORS) and WebSocket-based notifications.</li>
+            <li><strong>Service Layer:</strong> Business logic for authentication, role management, workout processing,
+                notifications, etc.
+            </li>
+            <li><strong>Controller Layer:</strong> REST and web controllers exposing endpoints for Thymeleaf pages and
+                real-time communications.
+            </li>
+            <li>Additional support layers cover Security (JWT, OAuth2, CSRF, CORS) and WebSocket-based notifications.
+            </li>
         </ul>
     </div>
 
-    <!-- Accordion for Modules/User Stories -->
+    <!-- Accordion for Modules/com.example.spring_app_workout_tracker.entity.User Stories -->
     <div id="userStoriesAccordion">
 
         <!-- Story 1: Authentication Module -->
@@ -43,20 +71,25 @@
                 <h2 class="mb-0">
                     <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
                             data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        1. User Authentication Flow (5 Story Points)
+                        1. com.example.spring_app_workout_tracker.entity.User Authentication Flow (5 Story Points)
                     </button>
                 </h2>
             </div>
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#userStoriesAccordion">
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                 data-parent="#userStoriesAccordion">
                 <div class="card-body">
                     <p class="story-title">Title:</p>
-                    <p>User Authentication Flow with Local & OAuth2 Login</p>
+                    <p>com.example.spring_app_workout_tracker.entity.User Authentication Flow with Local & OAuth2
+                        Login</p>
 
                     <p class="story-title">Estimation:</p>
                     <p>5 Story Points</p>
 
                     <p class="story-title">Description:</p>
-                    <p>This story covers authentication using JWT for local login and OAuth2 for social login (Google/Facebook). It must securely handle user credential submissions, token generation/validation, and redirections, while enforcing security measures like CSRF, CORS, and secure sessions.</p>
+                    <p>This story covers authentication using JWT for local login and OAuth2 for social login
+                        (Google/Facebook). It must securely handle user credential submissions, token
+                        generation/validation, and redirections, while enforcing security measures like CSRF, CORS, and
+                        secure sessions.</p>
 
                     <p class="story-title">Implementation Details:</p>
                     <div class="implementation">
@@ -64,31 +97,47 @@
                             <li>
                                 <strong>Domain Entities:</strong>
                                 <ul>
-                                    <li><code>User</code>: Fields – <code>Long id</code>, <code>String email (unique)</code>, <code>String passwordHash</code>,
-                                        <code>String name</code>, <code>String timezone (default 'UTC')</code>, <code>Set&lt;Role&gt; roles</code>, <code>LocalDateTime createdAt, updatedAt</code></li>
-                                    <li><code>Role</code>: Fields – <code>Long id</code>, <code>String roleName</code> (e.g., ADMIN, TRAINER, USER)</li>
+                                    <li><code>com.example.spring_app_workout_tracker.entity.User</code>: Fields – <code>Long
+                                        id</code>, <code>String email (unique)</code>, <code>String passwordHash</code>,
+                                        <code>String name</code>, <code>String timezone (default 'UTC')</code>, <code>Set&lt;Role&gt;
+                                            roles</code>, <code>LocalDateTime createdAt, updatedAt</code></li>
+                                    <li><code>Role</code>: Fields – <code>Long id</code>, <code>String roleName</code>
+                                        (e.g., ADMIN, TRAINER, USER)
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Repositories:</strong>
                                 <ul>
-                                    <li><code>UserRepository</code>: Extends <code>JpaRepository&lt;User, Long&gt;</code> (with <code>findByEmail(String email)</code>)</li>
-                                    <li><code>RoleRepository</code>: Extends <code>JpaRepository&lt;Role, Long&gt;</code></li>
+                                    <li><code>UserRepository</code>: Extends <code>JpaRepository&lt;com.example.spring_app_workout_tracker.entity.User,
+                                        Long&gt;</code> (with <code>findByEmail(String email)</code>)
+                                    </li>
+                                    <li><code>RoleRepository</code>: Extends <code>JpaRepository&lt;Role,
+                                        Long&gt;</code></li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Services:</strong>
                                 <ul>
-                                    <li><code>UserService</code>: Methods – <code>register(User)</code>, <code>findByEmail(String email)</code>, <code>updateLastLogin(Long userId)</code></li>
-                                    <li><code>AuthService</code>: Methods for login flow, JWT generation (<code>generateToken(UserDetails)</code>), token validation, and token refresh.</li>
-                                    <li><code>JwtUtil</code>: Utility class to encapsulate JWT token logic using the jjwt library.</li>
+                                    <li><code>UserService</code>: Methods – <code>register(com.example.spring_app_workout_tracker.entity.User)</code>,
+                                        <code>findByEmail(String email)</code>, <code>updateLastLogin(Long
+                                            userId)</code></li>
+                                    <li><code>AuthService</code>: Methods for login flow, JWT generation (<code>generateToken(UserDetails)</code>),
+                                        token validation, and token refresh.
+                                    </li>
+                                    <li><code>JwtUtil</code>: Utility class to encapsulate JWT token logic using the
+                                        jjwt library.
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Controllers & Security:</strong>
                                 <ul>
-                                    <li><code>AuthController</code>: Endpoints – <code>POST /auth/login</code>, <code>POST /auth/refresh</code>, <code>GET /auth/oauth2/redirect</code></li>
-                                    <li><code>SecurityConfig</code>: Configure JWT filters, OAuth2 settings, CSRF, CORS, and role-based access (for Spring Boot 3.x use the latest DSL).</li>
+                                    <li><code>AuthController</code>: Endpoints – <code>POST /auth/login</code>, <code>POST
+                                        /auth/refresh</code>, <code>GET /auth/oauth2/redirect</code></li>
+                                    <li><code>SecurityConfig</code>: Configure JWT filters, OAuth2 settings, CSRF, CORS,
+                                        and role-based access (for Spring Boot 3.x use the latest DSL).
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -125,7 +174,9 @@
                     <p>3 Story Points</p>
 
                     <p class="story-title">Description:</p>
-                    <p>This story details enforcing a one-to-one relationship between a trainee and a trainer. It covers the administration of user roles (ADMIN, TRAINER, USER) and provides a dashboard for trainers to view and manage their assigned trainees.</p>
+                    <p>This story details enforcing a one-to-one relationship between a trainee and a trainer. It covers
+                        the administration of user roles (ADMIN, TRAINER, USER) and provides a dashboard for trainers to
+                        view and manage their assigned trainees.</p>
 
                     <p class="story-title">Implementation Details:</p>
                     <div class="implementation">
@@ -133,25 +184,34 @@
                             <li>
                                 <strong>Domain Entity:</strong>
                                 <ul>
-                                    <li><code>UserTrainer</code>: Fields – <code>Long id</code>, <code>User user</code> (trainee), <code>User trainer</code> (the trainer), <code>LocalDate startDate</code>, <code>LocalDate endDate</code> (nullable), <code>boolean active</code></li>
+                                    <li><code>UserTrainer</code>: Fields – <code>Long id</code>, <code>com.example.spring_app_workout_tracker.entity.User
+                                        user</code> (trainee), <code>com.example.spring_app_workout_tracker.entity.User
+                                        trainer</code> (the trainer), <code>LocalDate startDate</code>, <code>LocalDate
+                                        endDate</code> (nullable), <code>boolean active</code></li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Repository:</strong>
                                 <ul>
-                                    <li><code>UserTrainerRepository</code>: Extends <code>JpaRepository&lt;UserTrainer, Long&gt;</code> with <code>findByUserAndActiveTrue(User user)</code></li>
+                                    <li><code>UserTrainerRepository</code>: Extends <code>JpaRepository&lt;UserTrainer,
+                                        Long&gt;</code> with <code>findByUserAndActiveTrue(com.example.spring_app_workout_tracker.entity.User
+                                        user)</code></li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Service:</strong>
                                 <ul>
-                                    <li><code>TrainerService</code>: Methods – <code>assignTrainer(User, User)</code>, <code>removeTrainer(User)</code>, <code>getTraineesForTrainer(User)</code></li>
+                                    <li><code>TrainerService</code>: Methods – <code>assignTrainer(com.example.spring_app_workout_tracker.entity.User,
+                                        com.example.spring_app_workout_tracker.entity.User)</code>, <code>removeTrainer(com.example.spring_app_workout_tracker.entity.User)</code>,
+                                        <code>getTraineesForTrainer(com.example.spring_app_workout_tracker.entity.User)</code>
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Controller:</strong>
                                 <ul>
-                                    <li><code>TrainerController</code>: Endpoints – <code>POST /trainer/assign</code>, <code>POST /trainer/remove</code>, <code>GET /trainer/my-trainees</code></li>
+                                    <li><code>TrainerController</code>: Endpoints – <code>POST /trainer/assign</code>,
+                                        <code>POST /trainer/remove</code>, <code>GET /trainer/my-trainees</code></li>
                                 </ul>
                             </li>
                         </ul>
@@ -168,7 +228,7 @@
             </div>
         </div>
 
-        <!-- Story 3: Workout System – User Workflow -->
+        <!-- Story 3: Workout System – com.example.spring_app_workout_tracker.entity.User Workflow -->
         <div class="card story-section">
             <div class="card-header" id="headingThree">
                 <h2 class="mb-0">
@@ -187,7 +247,9 @@
                     <p>5 Story Points</p>
 
                     <p class="story-title">Description:</p>
-                    <p>This story enables users to create and manage personal workouts. The UI shows a “+” icon when no workout exists for the day. Once created, workouts are visually differentiated from trainer-assigned workouts.</p>
+                    <p>This story enables users to create and manage personal workouts. The UI shows a “+” icon when no
+                        workout exists for the day. Once created, workouts are visually differentiated from
+                        trainer-assigned workouts.</p>
 
                     <p class="story-title">Implementation Details:</p>
                     <div class="implementation">
@@ -195,32 +257,47 @@
                             <li>
                                 <strong>Domain Entity:</strong>
                                 <ul>
-                                    <li><code>Workout</code>: Fields – <code>Long id</code>, <code>User user</code> (trainee), <code>User createdBy</code> (creator: trainer or user),
-                                        <code>Enum WorkoutType { PERSONAL, TRAINER }</code>, <code>LocalDate scheduledDate</code>, <code>String content</code>,
+                                    <li><code>Workout</code>: Fields – <code>Long id</code>, <code>com.example.spring_app_workout_tracker.entity.User
+                                        user</code> (trainee), <code>com.example.spring_app_workout_tracker.entity.User
+                                        createdBy</code> (creator: trainer or user),
+                                        <code>Enum WorkoutType { PERSONAL, TRAINER }</code>, <code>LocalDate
+                                            scheduledDate</code>, <code>String content</code>,
                                         <code>LocalDateTime createdAt, updatedAt</code></li>
-                                    <li><code>WorkoutVersion</code>: Fields – <code>Long id</code>, <code>Workout workout</code>, <code>String diff</code>,
-                                        <code>User modifiedBy</code>, <code>LocalDateTime modifiedAt</code></li>
+                                    <li><code>WorkoutVersion</code>: Fields – <code>Long id</code>, <code>Workout
+                                        workout</code>, <code>String diff</code>,
+                                        <code>com.example.spring_app_workout_tracker.entity.User modifiedBy</code>,
+                                        <code>LocalDateTime modifiedAt</code></li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Repositories:</strong>
                                 <ul>
-                                    <li><code>WorkoutRepository</code>: Extends <code>JpaRepository&lt;Workout, Long&gt;</code> (with a custom method such as <code>findByUserAndScheduledDate(User, LocalDate)</code>)</li>
-                                    <li><code>WorkoutVersionRepository</code>: Extends <code>JpaRepository&lt;WorkoutVersion, Long&gt;</code></li>
+                                    <li><code>WorkoutRepository</code>: Extends <code>JpaRepository&lt;Workout,
+                                        Long&gt;</code> (with a custom method such as <code>findByUserAndScheduledDate(com.example.spring_app_workout_tracker.entity.User,
+                                        LocalDate)</code>)
+                                    </li>
+                                    <li><code>WorkoutVersionRepository</code>: Extends <code>JpaRepository&lt;WorkoutVersion,
+                                        Long&gt;</code></li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Services:</strong>
                                 <ul>
-                                    <li><code>WorkoutService</code>: Methods – <code>createWorkout(Workout)</code>, <code>updateWorkout(Workout)</code>, <code>deleteWorkout(Long)</code>,
-                                        <code>getWorkoutsForUserByDate(User, LocalDate)</code></li>
-                                    <li><code>WorkoutVersionService</code>: Method to <code>saveWorkoutVersion(Workout, String, User)</code> for update logging.</li>
+                                    <li><code>WorkoutService</code>: Methods – <code>createWorkout(Workout)</code>,
+                                        <code>updateWorkout(Workout)</code>, <code>deleteWorkout(Long)</code>,
+                                        <code>getWorkoutsForUserByDate(com.example.spring_app_workout_tracker.entity.User,
+                                            LocalDate)</code></li>
+                                    <li><code>WorkoutVersionService</code>: Method to <code>saveWorkoutVersion(Workout,
+                                        String, com.example.spring_app_workout_tracker.entity.User)</code> for update
+                                        logging.
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Controller:</strong>
                                 <ul>
-                                    <li><code>WorkoutController</code>: Endpoints – <code>POST /workouts</code>, <code>PUT /workouts/{id}</code>, <code>DELETE /workouts/{id}</code>,
+                                    <li><code>WorkoutController</code>: Endpoints – <code>POST /workouts</code>, <code>PUT
+                                        /workouts/{id}</code>, <code>DELETE /workouts/{id}</code>,
                                         <code>GET /workouts?date=...</code></li>
                                 </ul>
                             </li>
@@ -257,7 +334,9 @@
                     <p>5 Story Points</p>
 
                     <p class="story-title">Description:</p>
-                    <p>This story focuses on the trainer’s dashboard where trainers manage workouts for their assigned trainees in a Mon–Sun layout. Changes in workout details trigger updates that are visible on the trainee’s view.</p>
+                    <p>This story focuses on the trainer’s dashboard where trainers manage workouts for their assigned
+                        trainees in a Mon–Sun layout. Changes in workout details trigger updates that are visible on the
+                        trainee’s view.</p>
 
                     <p class="story-title">Implementation Details:</p>
                     <div class="implementation">
@@ -272,14 +351,18 @@
                             <li>
                                 <strong>Service:</strong>
                                 <ul>
-                                    <li>Extend <code>WorkoutService</code> methods to support updates and deletions initiated from the trainer dashboard.</li>
+                                    <li>Extend <code>WorkoutService</code> methods to support updates and deletions
+                                        initiated from the trainer dashboard.
+                                    </li>
                                     <li>Log changes via <code>WorkoutVersionService</code> for audit purposes.</li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Controller:</strong>
                                 <ul>
-                                    <li><code>TrainerController</code> (or a dedicated endpoint in <code>WorkoutController</code>) to allow creation, update, and deletion for each day.</li>
+                                    <li><code>TrainerController</code> (or a dedicated endpoint in <code>WorkoutController</code>)
+                                        to allow creation, update, and deletion for each day.
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -314,7 +397,9 @@
                     <p>4 Story Points</p>
 
                     <p class="story-title">Description:</p>
-                    <p>This story implements a real-time notification system using WebSocket and STOMP. Events such as workout creation, updates, or trainer removal trigger notifications delivered as toast messages and appear in a notification center.</p>
+                    <p>This story implements a real-time notification system using WebSocket and STOMP. Events such as
+                        workout creation, updates, or trainer removal trigger notifications delivered as toast messages
+                        and appear in a notification center.</p>
 
                     <p class="story-title">Implementation Details:</p>
                     <div class="implementation">
@@ -322,25 +407,36 @@
                             <li>
                                 <strong>WebSocket Configuration:</strong>
                                 <ul>
-                                    <li><code>WebSocketConfig</code>: Annotated with <code>@EnableWebSocketMessageBroker</code>, configures endpoint (e.g., <code>/ws</code>), allowed origins, and destination prefixes.</li>
+                                    <li><code>WebSocketConfig</code>: Annotated with
+                                        <code>@EnableWebSocketMessageBroker</code>, configures endpoint (e.g.,
+                                        <code>/ws</code>), allowed origins, and destination prefixes.
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Notification DTOs:</strong>
                                 <ul>
-                                    <li>Create classes such as <code>NotificationDTO</code> or <code>WorkoutNotificationMessage</code> to encapsulate message data.</li>
+                                    <li>Create classes such as <code>NotificationDTO</code> or <code>WorkoutNotificationMessage</code>
+                                        to encapsulate message data.
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Service:</strong>
                                 <ul>
-                                    <li><code>NotificationService</code>: Methods – <code>sendNotificationToUser(Long, NotificationDTO)</code> and <code>broadcastNotification(NotificationDTO)</code>; utilizes <code>SimpMessagingTemplate</code>.</li>
+                                    <li><code>NotificationService</code>: Methods – <code>sendNotificationToUser(Long,
+                                        NotificationDTO)</code> and <code>broadcastNotification(NotificationDTO)</code>;
+                                        utilizes <code>SimpMessagingTemplate</code>.
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Controller:</strong>
                                 <ul>
-                                    <li><code>NotificationController</code>: Optionally provide endpoints for managing notification subscriptions (or integrate notifications within existing controllers).</li>
+                                    <li><code>NotificationController</code>: Optionally provide endpoints for managing
+                                        notification subscriptions (or integrate notifications within existing
+                                        controllers).
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -350,7 +446,8 @@
                     <ul class="criteria">
                         <li>Notifications trigger upon workout events.</li>
                         <li>Secure WebSocket endpoints are configured using STOMP.</li>
-                        <li>Toast notifications display on the UI and a notification center shows historical events.</li>
+                        <li>Toast notifications display on the UI and a notification center shows historical events.
+                        </li>
                         <li>Multiple concurrent notifications do not impact system performance.</li>
                     </ul>
                 </div>
@@ -376,7 +473,8 @@
                     <p>3 Story Points</p>
 
                     <p class="story-title">Description:</p>
-                    <p>This story ensures that the application supports multiple languages (EN, DE, ES) and adapts fluidly across devices using Thymeleaf templates combined with Bootstrap’s grid system.</p>
+                    <p>This story ensures that the application supports multiple languages (EN, DE, ES) and adapts
+                        fluidly across devices using Thymeleaf templates combined with Bootstrap’s grid system.</p>
 
                     <p class="story-title">Implementation Details:</p>
                     <div class="implementation">
@@ -384,15 +482,21 @@
                             <li>
                                 <strong>Frontend:</strong>
                                 <ul>
-                                    <li>Create Thymeleaf templates for pages like <code>login.html</code>, <code>dashboard.html</code>, <code>trainer-dashboard.html</code>, and partial fragments (e.g., <code>notification-fragment.html</code>).</li>
+                                    <li>Create Thymeleaf templates for pages like <code>login.html</code>, <code>dashboard.html</code>,
+                                        <code>trainer-dashboard.html</code>, and partial fragments (e.g., <code>notification-fragment.html</code>).
+                                    </li>
                                     <li>Use a language selector in the header to change languages.</li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Backend:</strong>
                                 <ul>
-                                    <li>Add message resource bundles: <code>messages_en.properties</code>, <code>messages_de.properties</code>, <code>messages_es.properties</code> in the <code>resources</code> folder.</li>
-                                    <li>Configure a <code>LocaleResolver</code> bean (e.g., SessionLocaleResolver or CookieLocaleResolver) and register an interceptor for locale changes.</li>
+                                    <li>Add message resource bundles: <code>messages_en.properties</code>, <code>messages_de.properties</code>,
+                                        <code>messages_es.properties</code> in the <code>resources</code> folder.
+                                    </li>
+                                    <li>Configure a <code>LocaleResolver</code> bean (e.g., SessionLocaleResolver or
+                                        CookieLocaleResolver) and register an interceptor for locale changes.
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -427,7 +531,9 @@
                     <p>3 Story Points</p>
 
                     <p class="story-title">Description:</p>
-                    <p>This story involves deploying the application to AWS using EC2 and RDS, configuring CloudWatch for monitoring, enforcing HTTPS via ACM certificates, and setting up rate limiting and input sanitization.</p>
+                    <p>This story involves deploying the application to AWS using EC2 and RDS, configuring CloudWatch
+                        for monitoring, enforcing HTTPS via ACM certificates, and setting up rate limiting and input
+                        sanitization.</p>
 
                     <p class="story-title">Implementation Details:</p>
                     <div class="implementation">
@@ -435,19 +541,26 @@
                             <li>
                                 <strong>Environment Setup:</strong>
                                 <ul>
-                                    <li>Create <code>application.properties</code> and <code>application-prod.properties</code> for AWS settings (RDS MySQL connection, AWS S3 credentials if needed, CloudWatch logging configuration).</li>
+                                    <li>Create <code>application.properties</code> and
+                                        <code>application-prod.properties</code> for AWS settings (RDS MySQL connection,
+                                        AWS S3 credentials if needed, CloudWatch logging configuration).
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Deployment:</strong>
                                 <ul>
-                                    <li>Deploy the Spring Boot application to an EC2 instance behind a load balancer with ACM certificate enforcing HTTPS.</li>
+                                    <li>Deploy the Spring Boot application to an EC2 instance behind a load balancer
+                                        with ACM certificate enforcing HTTPS.
+                                    </li>
                                 </ul>
                             </li>
                             <li>
                                 <strong>Security Enhancements:</strong>
                                 <ul>
-                                    <li>Use Spring Security to sanitize inputs, enforce CSRF protection, and optionally add a rate-limiting filter.</li>
+                                    <li>Use Spring Security to sanitize inputs, enforce CSRF protection, and optionally
+                                        add a rate-limiting filter.
+                                    </li>
                                     <li>Configure HTTP headers (Content-Security-Policy, etc.) in SecurityConfig.</li>
                                 </ul>
                             </li>
@@ -471,22 +584,33 @@
     <div class="section-header mt-4">
         <h4>End-to-End Flow Overview</h4>
         <p>
-            <strong>Registration & Login:</strong> New users register via <code>register.html</code> handled by <code>AuthController</code> (which uses <code>UserService</code> and <code>AuthService</code> to create <code>User</code> entities and assign roles). A valid JWT is generated upon login and validated by a security filter.
+            <strong>Registration & Login:</strong> New users register via <code>register.html</code> handled by <code>AuthController</code>
+            (which uses <code>UserService</code> and <code>AuthService</code> to create <code>com.example.spring_app_workout_tracker.entity.User</code>
+            entities and assign roles). A valid JWT is generated upon login and validated by a security filter.
         </p>
         <p>
-            <strong>Role & Trainer Assignment:</strong> Trainees select a trainer through a form on their profile page. <code>TrainerController</code> calls <code>TrainerService.assignTrainer(...)</code> which creates a <code>UserTrainer</code> mapping after ensuring only one active trainer exists per user.
+            <strong>Role & Trainer Assignment:</strong> Trainees select a trainer through a form on their profile page.
+            <code>TrainerController</code> calls <code>TrainerService.assignTrainer(...)</code> which creates a <code>UserTrainer</code>
+            mapping after ensuring only one active trainer exists per user.
         </p>
         <p>
-            <strong>Workout Management:</strong> Users add personal workouts using a “+” button on the daily dashboard (via <code>WorkoutController.createWorkout(...)</code>). Trainer-assigned workouts are managed in a day-based layout accessed on the trainer dashboard. Changes are logged in <code>WorkoutVersion</code> entities.
+            <strong>Workout Management:</strong> Users add personal workouts using a “+” button on the daily dashboard
+            (via <code>WorkoutController.createWorkout(...)</code>). Trainer-assigned workouts are managed in a
+            day-based layout accessed on the trainer dashboard. Changes are logged in <code>WorkoutVersion</code>
+            entities.
         </p>
         <p>
-            <strong>Real-Time Notifications:</strong> Post workout creation or update, <code>NotificationService.sendNotificationToUser(...)</code> triggers a message via WebSocket (configured in <code>WebSocketConfig</code>), and the UI displays toast notifications.
+            <strong>Real-Time Notifications:</strong> Post workout creation or update, <code>NotificationService.sendNotificationToUser(...)</code>
+            triggers a message via WebSocket (configured in <code>WebSocketConfig</code>), and the UI displays toast
+            notifications.
         </p>
         <p>
-            <strong>I18n & UI Responsiveness:</strong> Language selection is handled by a locale resolver (configured with message bundles), and responsive layouts use Bootstrap’s grid system in Thymeleaf templates.
+            <strong>I18n & UI Responsiveness:</strong> Language selection is handled by a locale resolver (configured
+            with message bundles), and responsive layouts use Bootstrap’s grid system in Thymeleaf templates.
         </p>
         <p>
-            <strong>Deployment & Security:</strong> The application is deployed on AWS (EC2/RDS) with HTTPS enforced, proper logging to CloudWatch, and security enhancements (CSRF, CORS, rate limiting) via Spring Security.
+            <strong>Deployment & Security:</strong> The application is deployed on AWS (EC2/RDS) with HTTPS enforced,
+            proper logging to CloudWatch, and security enhancements (CSRF, CORS, rate limiting) via Spring Security.
         </p>
     </div>
 </div> <!-- End Container -->

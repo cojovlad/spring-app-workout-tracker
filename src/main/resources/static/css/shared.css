@@ -1,0 +1,79 @@
+/*shared.css*/
+body,
+h1, h2, h3, h4, h5, h6,
+p, span, label, .navbar-brand, .nav-link {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header-btn {
+    min-width: 120px;
+    height: 40px;
+    font-size: 1rem;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .375rem .75rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.common-header {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.common-header .logo {
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+.common-footer {
+    background-color: #343a40;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: .75rem 0;
+    text-align: center;
+}
+
+.main-content {
+    padding-bottom: 80px;
+}
+
+.header-icon {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    object-fit: contain;
+}
+
+.common-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.common-header .container-fluid {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+/* Logo Size Consistency */
+.common-header .logo {
+    font-size: 1.5rem !important;
+}
+
+/* Icon Button Consistency */
+.header-icon-link {
+    padding: 0.25rem 0.5rem;
+}
+
+.header-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
