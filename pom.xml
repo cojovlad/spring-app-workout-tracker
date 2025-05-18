@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>spring-app-workout-tracker</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>spring-app-workout-tracker</name>
     <description>Workout Tracker(Gymlog) is a fitness platform enabling users and trainers to manage workouts
         seamlessly. Track personal/trainer-assigned routines with real-time notifications. Features role-based access
