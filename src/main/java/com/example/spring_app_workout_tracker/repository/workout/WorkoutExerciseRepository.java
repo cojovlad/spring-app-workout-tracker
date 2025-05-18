@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface WorkoutExerciseRepository extends JpaRepository<WorkoutExercise, Long> {
+
     List<WorkoutExercise> findByWorkout(Workout workout);
 
     List<WorkoutExercise> findByExerciseId(Long exerciseId);

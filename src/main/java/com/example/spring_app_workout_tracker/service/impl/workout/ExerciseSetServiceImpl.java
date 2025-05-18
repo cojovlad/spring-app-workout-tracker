@@ -45,7 +45,8 @@ public class ExerciseSetServiceImpl implements ExerciseSetService {
     @Override
     @Transactional
     public ExerciseSet updateSet(Long id, Integer reps, BigDecimal weightKg, Integer restSeconds) {
-        ExerciseSet exerciseSet = exerciseSetRepository.findById(id).orElseThrow();
+        ExerciseSet exerciseSet = exerciseSetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(id.toString()));
         if (reps != null) exerciseSet.setRepetitions(reps);
         if (weightKg != null) exerciseSet.setWeightKg(weightKg);
         if (restSeconds != null) exerciseSet.setRestSeconds(restSeconds);

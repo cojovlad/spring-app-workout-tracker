@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
+
     List<Exercise> findByCreatedBy(User user);
 
     boolean existsByNameAndCreatedBy(String name, User createdBy);

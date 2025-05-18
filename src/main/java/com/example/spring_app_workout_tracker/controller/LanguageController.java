@@ -14,6 +14,8 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
 
+import static com.example.spring_app_workout_tracker.util.MessageKeys.SUCCESS;
+
 @Controller
 @RequestMapping("api/v1/language")
 public class LanguageController {
@@ -48,7 +50,7 @@ public class LanguageController {
         localeResolver.setLocale(request, null, selectedLocale);
 
         String successMessage = messageSource.getMessage("success.language.changed", null, locale);
-        redirectAttributes.addFlashAttribute("success", successMessage);
+        redirectAttributes.addFlashAttribute(SUCCESS, successMessage);
 
         return "redirect:/api/v1/dashboard";
     }

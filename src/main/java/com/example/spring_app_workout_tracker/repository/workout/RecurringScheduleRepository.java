@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface RecurringScheduleRepository extends JpaRepository<RecurringSchedule, Long> {
+
     List<RecurringSchedule> findByUserAndActiveTrue(User user);
 
     List<RecurringSchedule> findByWorkoutId(Long workoutId);

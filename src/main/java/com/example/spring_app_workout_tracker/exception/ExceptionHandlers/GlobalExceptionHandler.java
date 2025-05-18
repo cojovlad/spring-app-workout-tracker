@@ -1,6 +1,7 @@
-package com.example.spring_app_workout_tracker.exception;
+package com.example.spring_app_workout_tracker.exception.ExceptionHandlers;
 
 import com.example.spring_app_workout_tracker.dto.ErrorResponse;
+import com.example.spring_app_workout_tracker.exception.CustomAppException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;

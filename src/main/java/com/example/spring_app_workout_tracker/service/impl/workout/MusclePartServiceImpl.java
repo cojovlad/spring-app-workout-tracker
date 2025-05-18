@@ -29,7 +29,6 @@ public class MusclePartServiceImpl implements MusclePartService {
 
     @Override
     public void updateMusclePart(Long id, Long muscleGroupId) {
-        //TODO see why WorkoutExercise has an error but it still works
         WorkoutExercise workoutExercise = workoutExerciseRepository.findById(id).orElseThrow();
         MusclePart musclePart = musclePartRepository.findById(muscleGroupId).orElseThrow();
 
