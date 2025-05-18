@@ -13,6 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Locale;
 
+import static com.example.spring_app_workout_tracker.util.MessageKeys.*;
+
 @Controller
 @RequestMapping("api/v1/auth")
 public class AuthController {
@@ -43,41 +45,33 @@ public class AuthController {
 
         if (error != null) {
             String errorMessage = messageSource.getMessage("error.invalid.credentials", null, locale);
-            model.addAttribute("error", errorMessage);
+            model.addAttribute(ERROR, errorMessage);
         }
         if (logout != null) {
             String logoutMessage = messageSource.getMessage("success.logout", null, locale);
-            model.addAttribute("logoutMessage", logoutMessage);
+            model.addAttribute(LOGOUT_MESSAGE, logoutMessage);
         }
         if (registered != null) {
             String registeredMessage = messageSource.getMessage("success.registration", null, locale);
-            model.addAttribute("message", registeredMessage);
+            model.addAttribute(MESSAGE, registeredMessage);
         }
         return "login";
     }
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("languages", languageService.getAllLanguages());
+        model.addAttribute(USER, new User());
+        model.addAttribute(LANGUAGES, languageService.getAllLanguages());
         return "register";
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, RedirectAttributes redirectAttributes, Locale locale) {
-        try {
-            userService.createUser(user);
-            String successMessage = messageSource.getMessage("success.registration", null, locale);
-            redirectAttributes.addFlashAttribute("success", successMessage);
-            return "redirect:/api/v1/auth/login";
-        } catch (CustomAppException e) {
-            String errorMessage = e.getMessage();
-            try {
-                errorMessage = messageSource.getMessage(e.getMessage(), null, locale);
-            } catch (Exception ignored) {
-            }
-            redirectAttributes.addFlashAttribute("error", errorMessage);
-            return "redirect:/api/v1/auth/register";
-        }
+    public String registerUser(@ModelAttribute User user,
+                               RedirectAttributes redirectAttributes,
+                               Locale locale) {
+        userService.createUser(user);
+        String successMessage = messageSource.getMessage("success.registration", null, locale);
+        redirectAttributes.addFlashAttribute(SUCCESS, successMessage);
+        return "redirect:/api/v1/auth/login";
     }
 }

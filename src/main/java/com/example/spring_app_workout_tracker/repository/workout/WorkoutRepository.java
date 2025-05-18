@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface WorkoutRepository extends JpaRepository<Workout, Long> {
+
     List<Workout> findByCreatedBy(User user);
 
     List<Workout> findByParentTemplate(Workout template);

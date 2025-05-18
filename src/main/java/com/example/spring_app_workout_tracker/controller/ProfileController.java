@@ -18,6 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Locale;
 
+import static com.example.spring_app_workout_tracker.util.MessageKeys.*;
+
 @Controller
 @RequestMapping("api/v1/profile")
 public class ProfileController {
@@ -32,9 +34,9 @@ public class ProfileController {
 
     @GetMapping("")
     public String showProfile(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("user", user);
-        if (!model.containsAttribute("passwordChangeForm")) {
-            model.addAttribute("passwordChangeForm", new PasswordChangeForm());
+        model.addAttribute(USER, user);
+        if (!model.containsAttribute(PASSWORD_CHANGE_FORM)) {
+            model.addAttribute(PASSWORD_CHANGE_FORM, new PasswordChangeForm());
         }
         return "profile";
     }
@@ -42,33 +44,27 @@ public class ProfileController {
     @PostMapping("/change-password")
     public String changePassword(
             @AuthenticationPrincipal User user,
-            @Valid @ModelAttribute("passwordChangeForm") PasswordChangeForm form,
+            @Valid @ModelAttribute(PASSWORD_CHANGE_FORM) PasswordChangeForm form,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
             Locale locale) {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.passwordChangeForm", bindingResult);
-            redirectAttributes.addFlashAttribute("passwordChangeForm", form);
+            redirectAttributes.addFlashAttribute(PASSWORD_CHANGE_FORM, form);
             return "redirect:/api/v1/profile";
         }
 
         if (!form.getNewPassword().equals(form.getConfirmPassword())) {
             String mismatchMessage = messageSource.getMessage("error.password.mismatch", null, locale);
-            redirectAttributes.addFlashAttribute("error", mismatchMessage);
-            redirectAttributes.addFlashAttribute("passwordChangeForm", form);
+            redirectAttributes.addFlashAttribute(ERROR, mismatchMessage);
+            redirectAttributes.addFlashAttribute(PASSWORD_CHANGE_FORM, form);
             return "redirect:/api/v1/profile";
         }
 
-        try {
-            userService.changePassword(user.getUsername(), form.getCurrentPassword(), form.getNewPassword());
-            String successMessage = messageSource.getMessage("success.password.changed", null, locale);
-            redirectAttributes.addFlashAttribute("success", successMessage);
-        } catch (CustomAppException e) {
-            String errorMessage = messageSource.getMessage(e.getMessage(), null, locale);
-            redirectAttributes.addFlashAttribute("error", errorMessage);
-            redirectAttributes.addFlashAttribute("passwordChangeForm", form);
-        }
+        userService.changePassword(user.getUsername(), form.getCurrentPassword(), form.getNewPassword());
+        String successMessage = messageSource.getMessage("success.password.changed", null, locale);
+        redirectAttributes.addFlashAttribute(SUCCESS, successMessage);
 
         return "redirect:/api/v1/profile";
     }

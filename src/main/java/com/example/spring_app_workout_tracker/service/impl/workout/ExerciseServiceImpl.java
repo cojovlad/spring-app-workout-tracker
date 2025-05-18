@@ -3,8 +3,10 @@ package com.example.spring_app_workout_tracker.service.impl.workout;
 import com.example.spring_app_workout_tracker.dto.workout.SetRequest;
 import com.example.spring_app_workout_tracker.entity.User;
 import com.example.spring_app_workout_tracker.entity.workout.*;
-import com.example.spring_app_workout_tracker.exception.MusclePartNotFoundException;
-import com.example.spring_app_workout_tracker.exception.WorkoutNotFoundException;
+import com.example.spring_app_workout_tracker.exception.workout.ExerciseNotFoundException;
+import com.example.spring_app_workout_tracker.exception.workout.MusclePartNotFoundException;
+import com.example.spring_app_workout_tracker.exception.workout.WorkoutExerciseNotFound;
+import com.example.spring_app_workout_tracker.exception.workout.WorkoutNotFoundException;
 import com.example.spring_app_workout_tracker.repository.workout.*;
 import com.example.spring_app_workout_tracker.service.workout.ExerciseService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,8 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     @Transactional
     public void deleteExercise(Long id) {
-        Exercise exercise = exerciseRepository.findById(id).orElseThrow();
+        Exercise exercise = exerciseRepository.findById(id)
+                .orElseThrow(() -> new ExerciseNotFoundException(id.toString()));
 
         List<WorkoutExercise> workoutExercises = workoutExerciseRepository.findByExerciseId(id);
         workoutExercises.forEach(exerciseSetRepository::deleteByWorkoutExercise);
@@ -63,10 +66,12 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     @Transactional
     public void updateExerciseMuscle(Long exerciseId, Long newMusclePartId) {
-        WorkoutExercise we = workoutExerciseRepository.findById(exerciseId).orElseThrow();
-        MusclePart m = musclePartRepository.findById(newMusclePartId).orElseThrow();
-        we.setMusclePart(m);
-        workoutExerciseRepository.save(we);
+        WorkoutExercise workoutExercise = workoutExerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new WorkoutExerciseNotFound(exerciseId.toString()));
+        MusclePart musclePart = musclePartRepository.findById(newMusclePartId)
+                .orElseThrow(() -> new MusclePartNotFoundException(newMusclePartId.toString()));
+        workoutExercise.setMusclePart(musclePart);
+        workoutExerciseRepository.save(workoutExercise);
     }
 
     @Override
@@ -76,7 +81,7 @@ public class ExerciseServiceImpl implements ExerciseService {
                 .orElseThrow(() -> new WorkoutNotFoundException(workoutId));
 
         MusclePart musclePart = musclePartRepository.findById(musclePartId)
-                .orElseThrow(() -> new MusclePartNotFoundException((musclePartRepository.findById(musclePartId)).toString()));
+                .orElseThrow(() -> new MusclePartNotFoundException(musclePartId.toString()));
 
         Exercise exercise = new Exercise();
         exercise.setName(exerciseName);
@@ -115,8 +120,10 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     @Transactional
     public void removeMuscleTarget(Long exerciseId, Long musclePartId) {
-        Exercise e = exerciseRepository.findById(exerciseId).orElseThrow();
-        MusclePart m = musclePartRepository.findById(musclePartId).orElseThrow();
-        exerciseMuscleTargetRepository.deleteByExerciseAndMusclePart(e, m);
+        Exercise exercise = exerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new ExerciseNotFoundException(exerciseId.toString()));
+        MusclePart musclePart = musclePartRepository.findById(musclePartId)
+                .orElseThrow(() -> new MusclePartNotFoundException(musclePartId.toString()));
+        exerciseMuscleTargetRepository.deleteByExerciseAndMusclePart(exercise, musclePart);
     }
 }

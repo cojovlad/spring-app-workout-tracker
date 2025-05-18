@@ -7,8 +7,8 @@ import com.example.spring_app_workout_tracker.dto.workout.SetRequest;
 import com.example.spring_app_workout_tracker.dto.workout.WorkoutRequest;
 import com.example.spring_app_workout_tracker.entity.*;
 import com.example.spring_app_workout_tracker.entity.workout.*;
-import com.example.spring_app_workout_tracker.exception.MusclePartNotFoundException;
-import com.example.spring_app_workout_tracker.exception.WorkoutNotFoundException;
+import com.example.spring_app_workout_tracker.exception.workout.MusclePartNotFoundException;
+import com.example.spring_app_workout_tracker.exception.workout.WorkoutNotFoundException;
 import com.example.spring_app_workout_tracker.repository.workout.*;
 import com.example.spring_app_workout_tracker.service.workout.WorkoutService;
 import jakarta.transaction.Transactional;
@@ -121,12 +121,15 @@ public class WorkoutServiceImpl implements WorkoutService {
     }
 
     public void updateWorkout(Long id, String name) {
-        Workout workout = workoutRepository.findById(id).orElseThrow();
+        Workout workout = workoutRepository.findById(id)
+                .orElseThrow(() -> new WorkoutNotFoundException(id));
         workout.setName(name);
         workoutRepository.save(workout);
     }
 
     public void deleteWorkout(Long id) {
-        workoutRepository.deleteById(id);
+        Workout workout = workoutRepository.findById(id)
+                .orElseThrow(() -> new WorkoutNotFoundException(id));
+        workoutRepository.delete(workout);
     }
 }
