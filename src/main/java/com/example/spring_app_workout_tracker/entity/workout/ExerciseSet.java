@@ -31,7 +31,7 @@ public class ExerciseSet {
     private Integer repetitions;
 
     @Column(name = "weight_kg", nullable = false, precision = 5, scale = 2)
-    @DecimalMin("0.25")
+    @DecimalMin("0.00")
     @DecimalMax("500.00")
     private BigDecimal weightKg;
 
