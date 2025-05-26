@@ -48,10 +48,27 @@ document.addEventListener('DOMContentLoaded', function () {
         addSet(ex);
     }
 
-    function addSet(ex) {
-        const st = setTpl.cloneNode(true);
-        ex.querySelector('.sets').appendChild(st);
+    function addSet(exerciseElem) {
+        const setsContainer = exerciseElem.querySelector('.sets');
+        const existingSets = setsContainer.querySelectorAll('.set');
+        let newSet;
+
+        if (existingSets.length > 0) {
+            // Clone the last set, preserving its input values
+            const lastSet = existingSets[existingSets.length - 1];
+            newSet = lastSet.cloneNode(true);
+        } else {
+            // Fallback to blank template if no sets exist yet
+            newSet = setTpl.cloneNode(true);
+        }
+
+        // If you want to reset only certain fields (e.g. clear restSeconds), do it here:
+        // newSet.querySelector('input[name$="[restSeconds]"]').value = '';
+
+        setsContainer.appendChild(newSet);
+        reindex();
     }
+
 
     // Show the workout form when "New Workout" button is clicked
     newBtn.addEventListener('click', () => {

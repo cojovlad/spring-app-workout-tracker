@@ -32,17 +32,32 @@ document.addEventListener('DOMContentLoaded', function () {
     let setIndex = 0;
     document.querySelectorAll('.add-exercise-set').forEach(button => {
         button.addEventListener('click', function () {
-            const template = document.querySelector('.add-exercise-set-template');
-            const clone = template.cloneNode(true);
-            const html = clone.innerHTML.replace(/INDEX/g, setIndex++);
-            const container = this.closest('form').querySelector('.sets-container');
-            const wrapper = document.createElement('div');
-            wrapper.innerHTML = html;
-            container.appendChild(wrapper);
+            const form = this.closest('form');
+            const container = form.querySelector('.sets-container');
+            let newSetElem;
 
-            wrapper.querySelector('.remove-set').addEventListener('click', function () {
-                this.closest('.set').remove();
-            });
+            const existingSets = container.querySelectorAll('.set');
+            if (existingSets.length > 0) {
+                const lastSet = existingSets[existingSets.length - 1];
+                newSetElem = lastSet.cloneNode(true);
+                newSetElem.querySelectorAll('input').forEach(input => {
+                    input.name = input.name.replace(/sets\[\d+\]/, `sets[${setIndex}]`);
+                });
+            } else {
+                const tpl = document.querySelector('.add-exercise-set-template');
+                const clone = tpl.cloneNode(true);
+                const html = clone.innerHTML.replace(/INDEX/g, setIndex);
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = html;
+                newSetElem = wrapper.firstElementChild;
+            }
+
+            setIndex++;
+
+            newSetElem.querySelector('.remove-set')
+                .addEventListener('click', () => newSetElem.remove());
+
+            container.appendChild(newSetElem);
         });
     });
 });
