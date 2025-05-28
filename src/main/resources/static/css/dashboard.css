@@ -222,3 +222,34 @@ input[type="number"] {
         min-width: 80px;
     }
 }
+@media (min-width: 768px) {
+    .set-field {
+        flex: 1 1 150px;
+        min-width: 120px;
+    }
+}
+
+select[name="musclePartId"] {
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+@media (max-width: 575.98px) {
+    select[name="musclePartId"] {
+        max-height: 150px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    select[name="musclePartId"] {
+        max-height: 180px;
+    }
+}
+
+@media (min-width: 768px) {
+    select[name="musclePartId"] {
+        max-height: 220px;
+    }
+}
