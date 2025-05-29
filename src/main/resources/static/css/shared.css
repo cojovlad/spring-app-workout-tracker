@@ -38,6 +38,7 @@ p, span, label, .navbar-brand, .nav-link {
     width: 100%;
     padding: .75rem 0;
     text-align: center;
+    z-index: 2000;
 }
 
 .main-content {

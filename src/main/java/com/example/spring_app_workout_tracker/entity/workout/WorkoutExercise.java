@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -34,7 +35,8 @@ public class WorkoutExercise {
 
     @OneToMany(mappedBy = "workoutExercise", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("workoutExercise")
-    private Set<ExerciseSet> exerciseSets = new HashSet<>();
+    @OrderBy("setNumber ASC")
+    private Set<ExerciseSet> exerciseSets = new LinkedHashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workout_id", nullable = false)
