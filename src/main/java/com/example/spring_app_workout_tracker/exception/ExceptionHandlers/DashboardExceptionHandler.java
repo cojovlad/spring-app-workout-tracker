@@ -1,6 +1,7 @@
 package com.example.spring_app_workout_tracker.exception.ExceptionHandlers;
 
 import com.example.spring_app_workout_tracker.dto.ErrorResponse;
+import com.example.spring_app_workout_tracker.exception.CustomAppException;
 import com.example.spring_app_workout_tracker.exception.workout.ExerciseNotFoundException;
 import com.example.spring_app_workout_tracker.exception.workout.MusclePartNotFoundException;
 import com.example.spring_app_workout_tracker.exception.workout.WorkoutExerciseNotFound;
@@ -28,6 +29,18 @@ public class DashboardExceptionHandler {
     @Autowired
     public DashboardExceptionHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
+    }
+
+    @ExceptionHandler(CustomAppException.class)
+    public String handleCustomException(CustomAppException ex,
+                                        RedirectAttributes redirectAttributes,
+                                        Locale locale) {
+
+        String message = messageSource.getMessage(ex.getMessageKey(), ex.getArgs(), locale);
+
+        redirectAttributes.addFlashAttribute(ERROR, message);
+
+        return "redirect:/api/v1/dashboard";
     }
 
     @ExceptionHandler(WorkoutNotFoundException.class)
@@ -74,15 +87,20 @@ public class DashboardExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneral(Exception ex, Locale locale) {
+    public String handleGeneral(Exception ex,
+                                RedirectAttributes redirectAttributes,
+                                Locale locale) {
+
         String localizedMessage;
+
         if (ex.getMessage() != null) {
             localizedMessage = messageSource.getMessage("error.unexpected", new Object[]{ex.getMessage()}, locale);
         } else {
             localizedMessage = messageSource.getMessage("error.unexpected", null, locale);
         }
 
-        ErrorResponse error = new ErrorResponse(localizedMessage, "GENERIC_ERROR");
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        redirectAttributes.addFlashAttribute(ERROR, localizedMessage);
+
+        return "redirect:/api/v1/dashboard";
     }
 }

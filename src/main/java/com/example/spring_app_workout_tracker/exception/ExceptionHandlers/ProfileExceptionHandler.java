@@ -28,6 +28,7 @@ public class ProfileExceptionHandler {
                                         Locale locale) {
 
         String error = messageSource.getMessage(exception.getMessage(), null, locale);
+
         redirectAttributes.addFlashAttribute(ERROR, error);
 
         return "redirect:/api/v1/profile";

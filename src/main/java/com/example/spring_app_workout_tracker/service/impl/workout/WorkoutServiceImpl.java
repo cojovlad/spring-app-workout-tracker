@@ -7,12 +7,15 @@ import com.example.spring_app_workout_tracker.dto.workout.SetRequest;
 import com.example.spring_app_workout_tracker.dto.workout.WorkoutRequest;
 import com.example.spring_app_workout_tracker.entity.*;
 import com.example.spring_app_workout_tracker.entity.workout.*;
+import com.example.spring_app_workout_tracker.exception.CustomAppException;
 import com.example.spring_app_workout_tracker.exception.workout.MusclePartNotFoundException;
 import com.example.spring_app_workout_tracker.exception.workout.WorkoutNotFoundException;
 import com.example.spring_app_workout_tracker.repository.workout.*;
 import com.example.spring_app_workout_tracker.service.workout.WorkoutService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,10 +35,18 @@ public class WorkoutServiceImpl implements WorkoutService {
     private final WorkoutExerciseRepository workoutExerciseRepository;
     private final ExerciseSetRepository exerciseSetRepository;
     private final UserWorkoutRepository userWorkoutRepository;
+    private final MessageSource messageSource;
 
     public Workout createWorkoutTemplate(WorkoutRequest request, User user) {
+
+        String workoutRequestName = request.getName();
+
+        if(workoutRepository.existsByNameAndCreatedBy(workoutRequestName, user)) {
+            throw new CustomAppException("error.workout.name.taken", null, HttpStatus.BAD_REQUEST, "WORKOUT_NAME_TAKEN", messageSource);
+        }
+
         Workout workout = new Workout();
-        workout.setName(request.getName());
+        workout.setName(workoutRequestName);
         workout.setDescription(request.getDescription());
         workout.setType(Workout.Type.TEMPLATE);
         workout.setCreatedBy(user);
