@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(exclude = {"workoutExercise"})
 @Table(name = "exercise_sets")
 public class ExerciseSet {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

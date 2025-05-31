@@ -22,6 +22,7 @@ import java.util.*;
         )
 )
 public class Workout {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
