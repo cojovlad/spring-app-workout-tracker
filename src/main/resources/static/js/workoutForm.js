@@ -54,16 +54,11 @@ document.addEventListener('DOMContentLoaded', function () {
         let newSet;
 
         if (existingSets.length > 0) {
-            // Clone the last set, preserving its input values
             const lastSet = existingSets[existingSets.length - 1];
             newSet = lastSet.cloneNode(true);
         } else {
-            // Fallback to blank template if no sets exist yet
             newSet = setTpl.cloneNode(true);
         }
-
-        // If you want to reset only certain fields (e.g. clear restSeconds), do it here:
-        // newSet.querySelector('input[name$="[restSeconds]"]').value = '';
 
         setsContainer.appendChild(newSet);
         reindex();
