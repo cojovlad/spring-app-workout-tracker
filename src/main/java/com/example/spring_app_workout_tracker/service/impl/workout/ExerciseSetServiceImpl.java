@@ -3,6 +3,7 @@ package com.example.spring_app_workout_tracker.service.impl.workout;
 import com.example.spring_app_workout_tracker.dto.workout.SetRequest;
 import com.example.spring_app_workout_tracker.entity.workout.ExerciseSet;
 import com.example.spring_app_workout_tracker.entity.workout.WorkoutExercise;
+import com.example.spring_app_workout_tracker.exception.workout.ExerciseSetNotFound;
 import com.example.spring_app_workout_tracker.repository.workout.ExerciseSetRepository;
 import com.example.spring_app_workout_tracker.repository.workout.WorkoutExerciseRepository;
 import com.example.spring_app_workout_tracker.service.workout.ExerciseSetService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +58,24 @@ public class ExerciseSetServiceImpl implements ExerciseSetService {
     @Override
     @Transactional
     public void deleteSet(Long id) {
-        exerciseSetRepository.deleteById(id);
+        ExerciseSet setToDelete = exerciseSetRepository.findById(id)
+                .orElseThrow(() -> new ExerciseSetNotFound(id.toString()));
+
+        WorkoutExercise parentWorkoutExercise = setToDelete.getWorkoutExercise();
+
+        if (parentWorkoutExercise == null) {
+            exerciseSetRepository.delete(setToDelete);
+            return;
+        }
+
+        exerciseSetRepository.delete(setToDelete);
+
+        List<ExerciseSet> remainingSets = exerciseSetRepository.findByWorkoutExerciseOrderBySetNumberAsc(parentWorkoutExercise);
+
+        int currentSetNumber = 1;
+        for (ExerciseSet set : remainingSets) {
+            set.setSetNumber(currentSetNumber++);
+            exerciseSetRepository.save(set);
+        }
     }
 }

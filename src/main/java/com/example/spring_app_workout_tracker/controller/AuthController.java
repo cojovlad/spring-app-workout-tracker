@@ -1,7 +1,6 @@
 package com.example.spring_app_workout_tracker.controller;
 
 import com.example.spring_app_workout_tracker.entity.User;
-import com.example.spring_app_workout_tracker.exception.CustomAppException;
 import com.example.spring_app_workout_tracker.service.LanguageService;
 import com.example.spring_app_workout_tracker.service.UserService;
 import org.springframework.context.MessageSource;

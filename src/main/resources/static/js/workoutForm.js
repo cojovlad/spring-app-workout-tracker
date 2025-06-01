@@ -48,10 +48,22 @@ document.addEventListener('DOMContentLoaded', function () {
         addSet(ex);
     }
 
-    function addSet(ex) {
-        const st = setTpl.cloneNode(true);
-        ex.querySelector('.sets').appendChild(st);
+    function addSet(exerciseElem) {
+        const setsContainer = exerciseElem.querySelector('.sets');
+        const existingSets = setsContainer.querySelectorAll('.set');
+        let newSet;
+
+        if (existingSets.length > 0) {
+            const lastSet = existingSets[existingSets.length - 1];
+            newSet = lastSet.cloneNode(true);
+        } else {
+            newSet = setTpl.cloneNode(true);
+        }
+
+        setsContainer.appendChild(newSet);
+        reindex();
     }
+
 
     // Show the workout form when "New Workout" button is clicked
     newBtn.addEventListener('click', () => {

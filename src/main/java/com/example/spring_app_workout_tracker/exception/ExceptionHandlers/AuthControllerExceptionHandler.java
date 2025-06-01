@@ -26,13 +26,17 @@ public class AuthControllerExceptionHandler {
     public String handleCustomException(CustomAppException exception,
                                         RedirectAttributes redirectAttributes,
                                         Locale locale) {
+
         String errorMessage;
+
         try {
             errorMessage = messageSource.getMessage(exception.getMessage(), null, locale);
         } catch (Exception ex) {
             errorMessage = exception.getMessage();
         }
+
         redirectAttributes.addFlashAttribute(ERROR, errorMessage);
+
         return "redirect:/api/v1/auth/register";
     }
 }
