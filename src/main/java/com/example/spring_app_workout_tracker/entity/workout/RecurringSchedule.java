@@ -17,6 +17,7 @@ import java.util.Date;
 @EqualsAndHashCode(exclude = {"user", "workout"})
 @Table(name = "recurring_schedules")
 public class RecurringSchedule {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

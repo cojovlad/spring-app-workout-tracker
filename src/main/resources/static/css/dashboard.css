@@ -2,29 +2,17 @@
 @media (max-width: 767.98px) {
     .mobile-sidebar {
         position: fixed;
-        top: 70px;
-        bottom: 70px;
+        top: 0;
+        bottom: 0;
         left: -100%;
-        width: auto;
-        height: auto;
+        width: 70%;
         transition: left 0.3s;
-        z-index: 1000;
+        z-index: 1050;      /* sit above header/footer */
+        background-color: #f8f9fa; /* or whatever your sidebar bg is */
         overflow-y: auto;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     }
-
     .mobile-sidebar-active {
         left: 0;
-    }
-
-    .header-btn {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.8rem;
-    }
-
-    .exercise-name,
-    .muscle-select {
-        max-width: 100% !important;
     }
 }
 
@@ -215,4 +203,41 @@ input[type="number"] {
 
 .muscle-select::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+@media (max-width: 575.98px) {
+    .set-field {
+        flex: 1 1 100px;
+        min-width: 80px;
+    }
+}
+@media (min-width: 768px) {
+    .set-field {
+        flex: 1 1 150px;
+        min-width: 120px;
+    }
+}
+
+select[name="musclePartId"] {
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+@media (max-width: 575.98px) {
+    select[name="musclePartId"] {
+        max-height: 150px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    select[name="musclePartId"] {
+        max-height: 180px;
+    }
+}
+
+@media (min-width: 768px) {
+    select[name="musclePartId"] {
+        max-height: 220px;
+    }
 }

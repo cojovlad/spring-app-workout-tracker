@@ -18,6 +18,7 @@ import java.util.Date;
 @EqualsAndHashCode(exclude = {"createdBy"})
 @Table(name = "exercises")
 public class Exercise {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

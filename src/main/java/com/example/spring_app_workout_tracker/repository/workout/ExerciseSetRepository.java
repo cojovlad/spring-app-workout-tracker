@@ -14,6 +14,8 @@ public interface ExerciseSetRepository extends JpaRepository<ExerciseSet, Long> 
 
     List<ExerciseSet> findByWorkoutExercise(WorkoutExercise workoutExercise);
 
+    List<ExerciseSet> findByWorkoutExerciseOrderBySetNumberAsc(WorkoutExercise workoutExercise);
+
     void deleteByWorkoutExercise(WorkoutExercise workoutExercise);
 
     @Query("SELECT MAX(es.setNumber) FROM ExerciseSet es WHERE es.workoutExercise.id = :workoutExerciseId")
