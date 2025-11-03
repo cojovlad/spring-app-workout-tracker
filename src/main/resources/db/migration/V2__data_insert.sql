@@ -1,0 +1,16 @@
+INSERT INTO muscle_parts (name) VALUES
+                                    ('Chest'),
+                                    ('Back'),
+                                    ('Legs'),
+                                    ('Shoulders'),
+                                    ('Biceps'),
+                                    ('Triceps'),
+                                    ('Abs'),
+                                    ('Glutes'),
+                                    ('Hamstrings'),
+                                    ('Calves'),
+                                    ('Forearms'),
+                                    ('Traps'),
+                                    ('Lats'),
+                                    ('Quadriceps'),
+                                    ('Obliques');
