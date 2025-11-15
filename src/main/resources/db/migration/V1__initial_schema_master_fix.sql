@@ -178,3 +178,57 @@ CREATE TABLE IF NOT EXISTS recurring_schedules (
 CREATE INDEX idx_user_workouts_date ON user_workouts(user_id, scheduled_date);
 CREATE INDEX idx_recurring_active ON recurring_schedules(user_id, active);
 CREATE INDEX idx_exercise_creator ON exercises(created_by_user_id);
+
+-- ---------------------------------------------------
+-- Languages
+-- ---------------------------------------------------
+INSERT INTO languages (code, name) VALUES
+                                       ('en', 'English'),
+                                       ('es', 'Spanish'),
+                                       ('Ro', 'Romanian'),
+                                       ('de', 'Deutsch');
+
+-- ---------------------------------------------------
+-- Roles
+-- ---------------------------------------------------
+INSERT INTO roles (name) VALUES
+                             ('Admin'),
+                             ('Trainer'),
+                             ('User');
+
+-- ---------------------------------------------------
+-- Users
+-- ---------------------------------------------------
+INSERT INTO users (first_name, last_name, username, email, password_hash, language_id)
+VALUES
+    ('John', 'Doe', 'johndoe', 'john@example.com', 'hashedpassword1', 1),
+    ('Jane', 'Smith', 'janesmith', 'jane@example.com', 'hashedpassword2', 1),
+    ('Carlos', 'Gomez', 'carlosg', 'carlos@example.com', 'hashedpassword3', 2);
+
+-- ---------------------------------------------------
+-- User Roles
+-- ---------------------------------------------------
+INSERT INTO user_roles (user_id, role_id) VALUES
+                                              (1, 1), -- John as Admin
+                                              (2, 3), -- Jane as User
+                                              (3, 2); -- Carlos as Trainer
+
+-- ---------------------------------------------------
+-- Muscle Parts
+-- ---------------------------------------------------
+INSERT INTO muscle_parts (name) VALUES
+                                    ('Chest'),
+                                    ('Back'),
+                                    ('Legs'),
+                                    ('Shoulders'),
+                                    ('Biceps'),
+                                    ('Triceps'),
+                                    ('Abs'),
+                                    ('Glutes'),
+                                    ('Hamstrings'),
+                                    ('Calves'),
+                                    ('Forearms'),
+                                    ('Traps'),
+                                    ('Lats'),
+                                    ('Quadriceps'),
+                                    ('Obliques');
